@@ -1,0 +1,20 @@
+[gd_scene load_steps=6 format=3 uid="uid://b7mxqokcravnv"]
+
+[ext_resource type="PackedScene" uid="uid://cmj0t0lsilo8y" path="res://Models/arena.blend" id="1_qg7dx"]
+[ext_resource type="Texture2D" uid="uid://dqogescxjqlwm" path="res://addons/kenney_prototype_textures/dark/texture_04.png" id="2_k5lwm"]
+[ext_resource type="Texture2D" uid="uid://cqvbc7xrqblrk" path="res://addons/kenney_prototype_textures/green/texture_05.png" id="3_mnn7s"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mbyvw"]
+albedo_texture = ExtResource("2_k5lwm")
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s7cuv"]
+albedo_color = Color(0.16889, 0.431326, 0.322085, 1)
+albedo_texture = ExtResource("3_mnn7s")
+uv1_triplanar = true
+
+[node name="arena" instance=ExtResource("1_qg7dx")]
+
+[node name="Plane" parent="." index="0"]
+surface_material_override/0 = SubResource("StandardMaterial3D_mbyvw")
+surface_material_override/1 = SubResource("StandardMaterial3D_s7cuv")

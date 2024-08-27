@@ -1,0 +1,105 @@
+[gd_scene load_steps=9 format=3 uid="uid://dafxi6djap6hu"]
+
+[ext_resource type="Script" path="res://Scripts/battle_arena.gd" id="1_rw6c8"]
+[ext_resource type="PackedScene" uid="uid://b7mxqokcravnv" path="res://Gameplay Scenes/arena.tscn" id="1_ygb6g"]
+[ext_resource type="PackedScene" uid="uid://dbjqoo21fmc8f" path="res://Object Scenes/player.tscn" id="2_p3868"]
+[ext_resource type="PackedScene" uid="uid://b2tnuqgoe5c28" path="res://UI Scenes/turn_order_display.tscn" id="4_phdbl"]
+[ext_resource type="PackedScene" uid="uid://mupqcdfime6k" path="res://Object Scenes/test_mon.tscn" id="4_s2ued"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcgp1"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_e8bxa"]
+sky_material = SubResource("ProceduralSkyMaterial_xcgp1")
+
+[sub_resource type="Environment" id="Environment_lhn0y"]
+background_mode = 2
+sky = SubResource("Sky_e8bxa")
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="BattleArena" type="Node3D"]
+script = ExtResource("1_rw6c8")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_lhn0y")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="arena" parent="." instance=ExtResource("1_ygb6g")]
+
+[node name="PlayerPoint1" type="Node3D" parent="arena"]
+transform = Transform3D(0.507117, 0.0826073, -0.857909, -4.54467e-09, 0.995396, 0.0958458, 0.861877, -0.048605, 0.504783, -5, 0.57619, 1.80157)
+
+[node name="Player" parent="arena/PlayerPoint1" instance=ExtResource("2_p3868")]
+display_name = "P One"
+
+[node name="PlayerPoint2" type="Node3D" parent="arena"]
+transform = Transform3D(-0.507538, -0.0825835, 0.857662, 0, 0.995396, 0.0958458, -0.861629, 0.0486454, -0.505202, 5, 0.576, -1.802)
+
+[node name="Player" parent="arena/PlayerPoint2" instance=ExtResource("2_p3868")]
+display_name = "P Two"
+
+[node name="MonsterPoint1" type="Node3D" parent="arena"]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.5, 0.0599527, 0)
+
+[node name="TestMon" parent="arena/MonsterPoint1" instance=ExtResource("4_s2ued")]
+display_name = "Mon One"
+
+[node name="MonsterPoint2" type="Node3D" parent="arena"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.06, 0)
+
+[node name="TestMon" parent="arena/MonsterPoint2" instance=ExtResource("4_s2ued")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+display_name = "Mon Two"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="HUD" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TurnOrderDisplay" parent="CanvasLayer/HUD" node_paths=PackedStringArray("battle_controller") instance=ExtResource("4_phdbl")]
+layout_mode = 1
+offset_left = 944.0
+offset_right = -2.0
+battle_controller = NodePath("../../..")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 978.0
+offset_top = 544.0
+offset_right = -30.0
+offset_bottom = -73.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LineEdit" type="LineEdit" parent="CanvasLayer/HUD/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "0"
+
+[node name="Button" type="Button" parent="CanvasLayer/HUD/HBoxContainer"]
+layout_mode = 2
+text = "apply av"
+
+[node name="ButtonRandom" type="Button" parent="CanvasLayer/HUD"]
+layout_mode = 0
+offset_left = 982.0
+offset_top = 579.0
+offset_right = 1120.0
+offset_bottom = 610.0
+text = "apply random av"
+
+[connection signal="turn_order_calculated" from="." to="CanvasLayer/HUD/TurnOrderDisplay" method="_on_battle_arena_turn_order_calculated"]
+[connection signal="pressed" from="CanvasLayer/HUD/HBoxContainer/Button" to="." method="_on_av_test_pressed"]
+[connection signal="pressed" from="CanvasLayer/HUD/ButtonRandom" to="." method="_on_button_random_pressed"]

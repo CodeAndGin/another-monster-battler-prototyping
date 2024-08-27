@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://mupqcdfime6k"]
+
+[ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="1_dioyj"]
+[ext_resource type="Script" path="res://Scripts/test_mon.gd" id="2_ssacf"]
+
+[node name="TestMon" type="Node3D"]
+script = ExtResource("2_ssacf")
+
+[node name="FrontFace" type="Sprite3D" parent="."]
+centered = false
+offset = Vector2(-64, 0)
+modulate = Color(2.21401e-06, 0.680018, 0.370414, 1)
+double_sided = false
+texture = ExtResource("1_dioyj")
+
+[node name="BackFace" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+centered = false
+offset = Vector2(-64, 0)
+double_sided = false
+texture = ExtResource("1_dioyj")

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dbjqoo21fmc8f"]
+
+[ext_resource type="Script" path="res://Scripts/player.gd" id="1_txhni"]
+
+[node name="Player" type="Camera3D"]
+fov = 34.1
+script = ExtResource("1_txhni")
