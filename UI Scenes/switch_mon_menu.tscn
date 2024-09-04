@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dij256j18u2pw"]
+[gd_scene load_steps=2 format=3 uid="uid://dij256j18u2pw"]
+
+[ext_resource type="Script" path="res://Scripts/switch_mon_menu.gd" id="1_u6syt"]
 
 [node name="Switch Mon Menu" type="PanelContainer"]
 anchors_preset = 15
@@ -6,6 +8,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_u6syt")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 2
@@ -20,7 +23,15 @@ layout_mode = 2
 [node name="BenchMon1" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+toggle_mode = true
+autowrap_mode = 3
 
 [node name="BenchMon2" type="Button" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
+toggle_mode = true
+text_overrun_behavior = 3
+autowrap_mode = 1
+
+[connection signal="toggled" from="MarginContainer/HBoxContainer/BenchMon1" to="." method="_on_bench_mon_1_toggled"]
+[connection signal="toggled" from="MarginContainer/HBoxContainer/BenchMon2" to="." method="_on_bench_mon_2_toggled"]
