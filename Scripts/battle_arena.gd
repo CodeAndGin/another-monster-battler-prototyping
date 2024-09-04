@@ -101,7 +101,6 @@ func discover_av_conflicts(action_values):
 				conflicts[act] = actor
 	if conflicts.size()<=3:
 		var newcon = []
-		var i = 1
 		for key in conflicts:
 			newcon.append(key)
 		return newcon

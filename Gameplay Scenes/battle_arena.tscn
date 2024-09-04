@@ -1,10 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://dafxi6djap6hu"]
+[gd_scene load_steps=13 format=3 uid="uid://dafxi6djap6hu"]
 
 [ext_resource type="Script" path="res://Scripts/battle_arena.gd" id="1_rw6c8"]
 [ext_resource type="PackedScene" uid="uid://b7mxqokcravnv" path="res://Gameplay Scenes/arena.tscn" id="1_ygb6g"]
 [ext_resource type="PackedScene" uid="uid://dbjqoo21fmc8f" path="res://Object Scenes/player.tscn" id="2_p3868"]
 [ext_resource type="PackedScene" uid="uid://b2tnuqgoe5c28" path="res://UI Scenes/turn_order_display.tscn" id="4_phdbl"]
 [ext_resource type="PackedScene" uid="uid://mupqcdfime6k" path="res://Object Scenes/test_mon.tscn" id="4_s2ued"]
+[ext_resource type="Script" path="res://Scripts/battle_hud.gd" id="5_851yb"]
+[ext_resource type="PackedScene" uid="uid://c5114u4538jg4" path="res://UI Scenes/player_buttons.tscn" id="6_uxm72"]
+[ext_resource type="PackedScene" uid="uid://dphxdtiqku0tt" path="res://UI Scenes/direct_order_menu.tscn" id="7_mejuj"]
+[ext_resource type="PackedScene" uid="uid://dij256j18u2pw" path="res://UI Scenes/switch_mon_menu.tscn" id="8_756s2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcgp1"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -47,14 +51,38 @@ display_name = "P Two"
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, -3.5, 0.0599527, 0)
 
 [node name="TestMon" parent="arena/MonsterPoint1" instance=ExtResource("4_s2ued")]
-display_name = "Mon One"
+display_name = "Mon A One"
 
 [node name="MonsterPoint2" type="Node3D" parent="arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.06, 0)
 
 [node name="TestMon" parent="arena/MonsterPoint2" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
-display_name = "Mon Two"
+display_name = "Mon A Two"
+
+[node name="Bench1" type="Node3D" parent="arena"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99404, 0, -1.53998)
+visible = false
+
+[node name="TestMon2" parent="arena/Bench1" instance=ExtResource("4_s2ued")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.49404, 0.0599527, 1.53998)
+display_name = "Mon B One"
+
+[node name="TestMon3" parent="arena/Bench1" instance=ExtResource("4_s2ued")]
+transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 1.49404, 0.0599527, 1.53998)
+display_name = "Mon C One"
+
+[node name="Bench2" type="Node3D" parent="arena"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.31231, 0, 1.79968)
+visible = false
+
+[node name="TestMon2" parent="arena/Bench2" instance=ExtResource("4_s2ued")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.81231, 0.06, -1.79968)
+display_name = "Mon B Two"
+
+[node name="TestMon3" parent="arena/Bench2" instance=ExtResource("4_s2ued")]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -1.81231, 0.06, -1.79968)
+display_name = "Mon C Two"
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -65,6 +93,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("5_851yb")
 
 [node name="TurnOrderDisplay" parent="CanvasLayer/HUD" node_paths=PackedStringArray("battle_controller") instance=ExtResource("4_phdbl")]
 layout_mode = 1
@@ -100,6 +129,31 @@ offset_right = 1120.0
 offset_bottom = 610.0
 text = "apply random av"
 
+[node name="Player Buttons" parent="CanvasLayer/HUD" instance=ExtResource("6_uxm72")]
+layout_mode = 1
+offset_top = 547.0
+offset_right = -206.0
+
+[node name="Direct Order Menu" parent="CanvasLayer/HUD" instance=ExtResource("7_mejuj")]
+visible = false
+layout_mode = 1
+offset_left = 1.0
+offset_top = 234.0
+offset_right = -681.0
+offset_bottom = -100.0
+
+[node name="Switch Mon Menu" parent="CanvasLayer/HUD" instance=ExtResource("8_756s2")]
+visible = false
+layout_mode = 1
+offset_left = 471.0
+offset_top = 471.0
+offset_right = -208.0
+offset_bottom = -100.0
+
 [connection signal="turn_order_calculated" from="." to="CanvasLayer/HUD/TurnOrderDisplay" method="_on_battle_arena_turn_order_calculated"]
 [connection signal="pressed" from="CanvasLayer/HUD/HBoxContainer/Button" to="." method="_on_av_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/ButtonRandom" to="." method="_on_button_random_pressed"]
+[connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/VBoxContainer/HBoxContainer/Direct Order Button" to="CanvasLayer/HUD" method="_on_direct_order_button_toggled"]
+[connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/VBoxContainer/HBoxContainer/Switch Monster Button" to="CanvasLayer/HUD" method="_on_switch_monster_button_toggled"]
+
+[editable path="CanvasLayer/HUD/Player Buttons"]

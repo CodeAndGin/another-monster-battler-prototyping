@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://bjexg6k45fm42"]
+
+[ext_resource type="Script" path="res://Scripts/generic_basic_move.gd" id="1_aofnl"]
+
+[node name="Generic Basic Move" type="Node3D"]
+script = ExtResource("1_aofnl")
+move_name = "Test"

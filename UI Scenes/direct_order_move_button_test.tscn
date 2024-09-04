@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cs2mr7c1yna5h"]
+
+[node name="Direct Order Move Button Test" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "A certain move?"
