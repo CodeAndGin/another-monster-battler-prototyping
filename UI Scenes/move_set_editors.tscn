@@ -1,0 +1,421 @@
+[gd_scene format=3 uid="uid://bf7tviqaoqwfr"]
+
+[node name="Move Set Editors" type="PanelContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Monster Name"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Set1" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+placeholder_text = "Set 1"
+alignment = 1
+
+[node name="Key" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Key"]
+layout_mode = 2
+text = "#"
+
+[node name="Condition" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Key"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Condition"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Move" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Key"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot1" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot1"]
+layout_mode = 2
+text = "1"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot1"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot1/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot1/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot2"]
+layout_mode = 2
+text = "2"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot2"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot3"]
+layout_mode = 2
+text = "3"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot3"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot3/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot3/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot4"]
+layout_mode = 2
+text = "4"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot4"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot4/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot4/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot5"]
+layout_mode = 2
+text = "5"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot5"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot5/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set1/Slot5/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Set2" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="LineEdit" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+placeholder_text = "Set 2"
+alignment = 1
+
+[node name="Key" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Key"]
+layout_mode = 2
+text = "#"
+
+[node name="Condition" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Key"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Condition"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Move" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Key"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Move"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Slot1" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot1"]
+layout_mode = 2
+text = "1"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot1"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot1"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot1/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot1/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot2"]
+layout_mode = 2
+text = "2"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot2"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot2/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot3"]
+layout_mode = 2
+text = "3"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot3"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot3/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot3/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot4" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot4"]
+layout_mode = 2
+text = "4"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot4"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot4/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot4/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="Slot5" type="HBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot5"]
+layout_mode = 2
+text = "5"
+
+[node name="Condition" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Condition"
+
+[node name="Move" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Select Move"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot5"]
+layout_mode = 2
+
+[node name="MoveUp" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot5/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▲"
+
+[node name="MoveDown" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer/Set2/Slot5/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 10
+text = "▼"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Cancel"
+
+[node name="Save" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Save"

@@ -97,21 +97,25 @@ script = ExtResource("5_851yb")
 
 [node name="TurnOrderDisplay" parent="CanvasLayer/HUD" node_paths=PackedStringArray("battle_controller") instance=ExtResource("4_phdbl")]
 layout_mode = 1
-offset_left = 944.0
-offset_right = -2.0
+anchors_preset = 11
+anchor_left = 1.0
+offset_left = -206.0
+grow_horizontal = 0
 battle_controller = NodePath("../../..")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/HUD"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 978.0
-offset_top = 544.0
+offset_left = -174.0
+offset_top = -106.0
 offset_right = -30.0
-offset_bottom = -73.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_bottom = -75.0
+grow_horizontal = 0
+grow_vertical = 0
 
 [node name="LineEdit" type="LineEdit" parent="CanvasLayer/HUD/HBoxContainer"]
 layout_mode = 2
@@ -122,33 +126,49 @@ layout_mode = 2
 text = "apply av"
 
 [node name="ButtonRandom" type="Button" parent="CanvasLayer/HUD"]
-layout_mode = 0
-offset_left = 982.0
-offset_top = 579.0
-offset_right = 1120.0
-offset_bottom = 610.0
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -171.0
+offset_top = -73.0
+offset_right = -33.0
+offset_bottom = -42.0
+grow_horizontal = 0
+grow_vertical = 0
 text = "apply random av"
 
 [node name="Player Buttons" parent="CanvasLayer/HUD" instance=ExtResource("6_uxm72")]
 layout_mode = 1
-offset_top = 547.0
+anchors_preset = 12
+anchor_top = 1.0
+offset_top = -76.0
 offset_right = -206.0
+grow_vertical = 0
 
 [node name="Direct Order Menu" parent="CanvasLayer/HUD" instance=ExtResource("7_mejuj")]
-visible = false
 layout_mode = 1
-offset_left = 1.0
-offset_top = 234.0
-offset_right = -750.0
-offset_bottom = -100.0
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 0.5
+offset_top = -431.0
+offset_right = -171.0
+offset_bottom = -74.0
+grow_horizontal = 1
+grow_vertical = 0
 
 [node name="Switch Mon Menu" parent="CanvasLayer/HUD" instance=ExtResource("8_756s2")]
-visible = false
 layout_mode = 1
-offset_left = 402.0
-offset_top = 471.0
-offset_right = -351.0
-offset_bottom = -100.0
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+offset_left = -171.0
+offset_top = -138.0
+offset_right = -208.0
+offset_bottom = -76.0
+grow_horizontal = 0
 
 [connection signal="turn_order_calculated" from="." to="CanvasLayer/HUD/TurnOrderDisplay" method="_on_battle_arena_turn_order_calculated"]
 [connection signal="pressed" from="CanvasLayer/HUD/HBoxContainer/Button" to="." method="_on_av_test_pressed"]
