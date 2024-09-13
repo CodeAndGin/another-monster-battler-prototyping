@@ -63,6 +63,7 @@ func get_action_values() -> Dictionary:
 			"monster1": active_refs["monster1"].action_value, \
 			"monster2": active_refs["monster2"].action_value}
 
+
 func execute_turn():
 	var going = active_refs[calculate_turn_order()[0]]
 	if going.action_value > 0:
@@ -90,116 +91,140 @@ func regenerate_conflict_resolution(last_went):
 	conflict_resolution_order.erase(last_went)
 	conflict_resolution_order.append(last_went)
 
-func discover_av_conflicts(action_values):
-	# returns an Array containing the keys ("player1", "player2", "monster1", "monster2")
-	# of active actors that have the same action value. If there are 2 sets of action values that are equal
-	# the Array contains both sets in indices 0,1 and 3,4, with the string "split" in index 2
-	var conflicts = {}
-	for act in action_values:
-		for actor in action_values:
-			if action_values[actor]==action_values[act] and act != actor and not conflicts.has(act):
-				conflicts[act] = actor
-	if conflicts.size()<=3:
-		var newcon = []
-		for key in conflicts:
-			newcon.append(key)
-		return newcon
-	elif conflicts.size()==4:
-		if action_values["player1"]==action_values["player2"] \
-			and action_values["player2"]==action_values["monster1"] \
-			and action_values["monster1"]==action_values["monster2"]:
-				var newcon = []
-				for key in conflicts:
-					newcon.append(key)
-				return newcon
-		else:
-			var newcon = ["", "", "split", "", ""]
-			var i = 0
-			for key in conflicts:
-				if i == 2: i+=1
-				if not newcon.has(key) and not newcon.has(conflicts[key]):
-					newcon[i] = key
-					i+=1
-					newcon[i] = conflicts[key]
-					i+=1
-			return newcon
+func better_turn_order_algorithm(order: Array, cro: Array):
+	var avs = []
+	for key in cro:
+		avs.append([key, get_action_values()[key]])
+	avs.sort_custom(func(a, b):
+		return a[1] < b[1]
+	)
+	for a in avs:
+		if order.has(a[0]): continue
+		order.append(a[0])
+	return order
+
+#func discover_av_conflicts(action_values):
+	## returns an Array containing the keys ("player1", "player2", "monster1", "monster2")
+	## of active actors that have the same action value. If there are 2 sets of action values that are equal
+	## the Array contains both sets in indices 0,1 and 3,4, with the string "split" in index 2
+	#var conflicts = {}
+	#for act in action_values:
+		#for actor in action_values:
+			#if action_values[actor]==action_values[act] and act != actor and not conflicts.has(act):
+				#conflicts[act] = actor
+	#if conflicts.size()<=3:
+		#var newcon = []
+		#for key in conflicts:
+			#newcon.append(key)
+		#return newcon
+	#elif conflicts.size()==4:
+		#if action_values["player1"]==action_values["player2"] \
+			#and action_values["player2"]==action_values["monster1"] \
+			#and action_values["monster1"]==action_values["monster2"]:
+				#var newcon = []
+				#for key in conflicts:
+					#newcon.append(key)
+				#return newcon
+		#else:
+			#var newcon = ["", "", "split", "", ""]
+			#var i = 0
+			#for key in conflicts:
+				#if i == 2: i+=1
+				#if not newcon.has(key) and not newcon.has(conflicts[key]):
+					#newcon[i] = key
+					#i+=1
+					#newcon[i] = conflicts[key]
+					#i+=1
+			#return newcon
 
 func calculate_turn_order() -> Array:
 	var order = []
-	var conflicts = discover_av_conflicts(get_action_values())
-	#opening turn order
 	if initial_order.size() == 4:
 		order = initial_order.duplicate()
-		#initial_order.pop_front()
 		return order
 	if initial_order.size() < 4 and initial_order.size() > 0:
 		order = initial_order.duplicate()
 		#initial_order.pop_front()
-		order = turn_order_algorithm(order, conflicts, get_action_values())
+		order = better_turn_order_algorithm(order, conflict_resolution_order)
 		return order
-	order = turn_order_algorithm(order, conflicts, get_action_values())
+	order = better_turn_order_algorithm(order, conflict_resolution_order)
 	turn_order_calculated.emit(order)
 	return order
+	##############Old Version Below################
+	#var conflicts = discover_av_conflicts(get_action_values())
+	##opening turn order
+	#if initial_order.size() == 4:
+		#order = initial_order.duplicate()
+		##initial_order.pop_front()
+		#return order
+	#if initial_order.size() < 4 and initial_order.size() > 0:
+		#order = initial_order.duplicate()
+		##initial_order.pop_front()
+		#order = turn_order_algorithm(order, conflicts, get_action_values())
+		#return order
+	#order = turn_order_algorithm(order, conflicts, get_action_values())
+	#turn_order_calculated.emit(order)
+	#return order
 
-func turn_order_algorithm(order: Array, conflicts: Array, action_values: Dictionary) -> Array:
-	while order.size() < 4:
-		var lowest_av = INF
-		var next = ""
-		for key in action_values:
-			var av = action_values[key]
-			if order.has(key): continue
-			if conflicts.size() == 4:
-				av = conflict_resolution_order.find(key)
-			elif conflicts.size() == 5:
-				var a = conflicts.find(key)
-				var b = 0
-				if a == 0: b = 1
-				elif a == 1: b = 0
-				elif a == 3: b = 4
-				elif a == 4: b = 3
-				a = conflicts[a]
-				b = conflicts[b]
-				if conflict_resolution_order.find(a) > conflict_resolution_order.find(b):
-					av+=0.01
-			elif conflicts.has(key):
-				var a = conflicts[0]
-				var b = conflicts[1]
-				var c = conflicts[2] if conflicts.size()==3 else null
-				if c==null: #Hellish bit of math to order conflicts using the resolution array
-					if conflict_resolution_order.find(a) > conflict_resolution_order.find(b):
-						if key==a: av += 0.01
-					else:
-						if key==b: av += 0.01
-				else: 
-					if conflict_resolution_order.find(a)>conflict_resolution_order.find(b) \
-					and conflict_resolution_order.find(a)>conflict_resolution_order.find(c):
-						if conflict_resolution_order.find(b)>conflict_resolution_order.find(c): 
-							if key==a: av += 0.02 
-							elif key==b: av += 0.01
-						else: 
-							if key==a: av += 0.02 
-							elif key==c: av += 0.01
-					elif conflict_resolution_order.find(b)>conflict_resolution_order.find(a) \
-					and conflict_resolution_order.find(b)>conflict_resolution_order.find(c):
-						if conflict_resolution_order.find(a)>conflict_resolution_order.find(c): 
-							if key==b: av += 0.02 
-							elif key==a: av += 0.01
-						else: 
-							if key==b: av += 0.02 
-							elif key==c: av += 0.01
-					elif conflict_resolution_order.find(c)>conflict_resolution_order.find(a) \
-					and conflict_resolution_order.find(c)>conflict_resolution_order.find(b):
-						if conflict_resolution_order.find(a)>conflict_resolution_order.find(b): 
-							if key==c: av += 0.02 
-							elif key==a: av += 0.01
-						else: 
-							if key==c: av += 0.02 
-							elif key==b: av += 0.01
-					pass
-			if av < lowest_av:
-				lowest_av = av
-				next = key
-		order.append(next)
-	return order
+#func turn_order_algorithm(order: Array, conflicts: Array, action_values: Dictionary) -> Array:
+	#while order.size() < 4:
+		#var lowest_av = INF
+		#var next = ""
+		#for key in action_values:
+			#var av = action_values[key]
+			#if order.has(key): continue
+			#if conflicts.size() == 4:
+				#av = conflict_resolution_order.find(key)
+			#elif conflicts.size() == 5:
+				#var a = conflicts.find(key)
+				#var b = 0
+				#if a == 0: b = 1
+				#elif a == 1: b = 0
+				#elif a == 3: b = 4
+				#elif a == 4: b = 3
+				#a = conflicts[a]
+				#b = conflicts[b]
+				#if conflict_resolution_order.find(a) > conflict_resolution_order.find(b):
+					#av+=0.01
+			#elif conflicts.has(key):
+				#var a = conflicts[0]
+				#var b = conflicts[1]
+				#var c = conflicts[2] if conflicts.size()==3 else null
+				#if c==null: #Hellish bit of math to order conflicts using the resolution array
+					#if conflict_resolution_order.find(a) > conflict_resolution_order.find(b):
+						#if key==a: av += 0.01
+					#else:
+						#if key==b: av += 0.01
+				#else: 
+					#if conflict_resolution_order.find(a)>conflict_resolution_order.find(b) \
+					#and conflict_resolution_order.find(a)>conflict_resolution_order.find(c):
+						#if conflict_resolution_order.find(b)>conflict_resolution_order.find(c): 
+							#if key==a: av += 0.02 
+							#elif key==b: av += 0.01
+						#else: 
+							#if key==a: av += 0.02 
+							#elif key==c: av += 0.01
+					#elif conflict_resolution_order.find(b)>conflict_resolution_order.find(a) \
+					#and conflict_resolution_order.find(b)>conflict_resolution_order.find(c):
+						#if conflict_resolution_order.find(a)>conflict_resolution_order.find(c): 
+							#if key==b: av += 0.02 
+							#elif key==a: av += 0.01
+						#else: 
+							#if key==b: av += 0.02 
+							#elif key==c: av += 0.01
+					#elif conflict_resolution_order.find(c)>conflict_resolution_order.find(a) \
+					#and conflict_resolution_order.find(c)>conflict_resolution_order.find(b):
+						#if conflict_resolution_order.find(a)>conflict_resolution_order.find(b): 
+							#if key==c: av += 0.02 
+							#elif key==a: av += 0.01
+						#else: 
+							#if key==c: av += 0.02 
+							#elif key==b: av += 0.01
+					#pass
+			#if av < lowest_av:
+				#lowest_av = av
+				#next = key
+		#order.append(next)
+	#return order
 
 #endregion
