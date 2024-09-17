@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dw71obaptm2mo"]
+
+[ext_resource type="Script" path="res://Scripts/generic_spell.gd" id="1_427op"]
+[ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="2_me3rb"]
+
+[node name="GenericSpell" type="Node3D"]
+script = ExtResource("1_427op")
+move_name = "Spell"
+av_cost = 1.0
+rv_cost = 1.0
+cast_time = 1.0
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+texture = ExtResource("2_me3rb")

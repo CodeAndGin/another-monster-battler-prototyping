@@ -5,9 +5,16 @@ extends Node3D
 @onready var player_point_2 = $arena/PlayerPoint2
 @onready var monster_point_1 = $arena/MonsterPoint1
 @onready var monster_point_2 = $arena/MonsterPoint2
+@onready var move_point_1 = $arena/MovePoint1
+@onready var move_point_2 = $arena/MovePoint2
 @onready var turn_order_display = $CanvasLayer/HUD/TurnOrderDisplay
 
 @onready var av_input = $CanvasLayer/HUD/HBoxContainer/LineEdit
+@onready var cast_av_input = $CanvasLayer/HUD/CastSpellTester/CastAv
+@onready var cast_ct_input = $CanvasLayer/HUD/CastSpellTester/CastCt
+
+@export var generic_spell: PackedScene
+
 var test_button_ready = false
 func _on_av_test_pressed() -> void:
 	if test_button_ready:
@@ -34,6 +41,34 @@ func _on_button_random_pressed() -> void:
 		turn_order_calculated.emit(calculate_turn_order())
 		execute_turn()
 
+func _on_cast_pressed() -> void:
+	if test_button_ready:
+		var going_key = calculate_turn_order()[0]
+		if cast_av_input.text == "" or cast_ct_input.text == "":
+			print("please enter a number")
+			return
+		var going = active_refs[going_key]
+		going.action_value += cast_av_input.text.to_int()
+		
+		var new_spell = generic_spell.instantiate()
+		move_container_refs[going_key+"spell"].add_child(new_spell)
+		#print(move_container_refs[going_key+"spell"].get_children())
+		new_spell.action_value = cast_ct_input.text.to_int()
+		new_spell.display_name = going.display_name + "'s Spell"
+		going.casting = true
+		spell_conflict_resolution_order.append(going_key+"spell")
+		regenerate_conflict_resolution(active_refs.find_key(going))
+		test_button_ready = false
+		if initial_order.size() > 0:
+			initial_order.pop_front()
+		turn_order_calculated.emit(calculate_turn_order())
+		execute_turn()
+
+func connect_move_containers():
+	for key in active_refs:
+		active_refs[key].connected_move_container = move_container_refs[key + "spell"]
+		print(active_refs[key].connected_move_container)
+
 @onready var active_refs = \
 	{
 		"player1": null,
@@ -51,11 +86,27 @@ func _on_button_random_pressed() -> void:
 		set(value):
 			pass
 
+@onready var move_container_refs = \
+	{
+		"player1spell": $arena/PlayerMovePoint1,
+		"player2spell": $arena/PlayerMovePoint2,
+		"monster1spell": $arena/MovePoint1,
+		"monster2spell": $arena/MovePoint2
+	}
+
+func get_active_spells():
+	var active_spells: Dictionary
+	for key in move_container_refs:
+		if len(move_container_refs[key].get_children()) > 0:
+			active_spells.get_or_add(key, move_container_refs[key].get_children()[0])
+	return active_spells
+
 func _ready() -> void:
 	turn_order_calculated.connect(turn_order_display.populate_list)
 	generate_initial_order_random()
 	turn_order_calculated.emit(calculate_turn_order())
 	execute_turn()
+	connect_move_containers()
 
 func get_action_values() -> Dictionary:
 	return {"player1": active_refs["player1"].action_value, \
@@ -65,16 +116,34 @@ func get_action_values() -> Dictionary:
 
 
 func execute_turn():
-	var going = active_refs[calculate_turn_order()[0]]
+	#print(calculate_turn_order()[0])
+	var going_key = calculate_turn_order()[0]
+	var going = null
+	if going_key.contains("spell"):
+		going = get_active_spells()[going_key]
+	else:
+		going = active_refs[going_key]
 	if going.action_value > 0:
 		var av_to_reduce = going.action_value
 		for actor in active_refs:
 			active_refs[actor].action_value -= av_to_reduce
+	if going_key.contains("spell"):
+		print(going.display_name + " has been cast")
+		going.cast_complete()
+		spell_conflict_resolution_order.pop_front()
+		for n in move_container_refs[going_key].get_children(): move_container_refs[going_key].remove_child(n)
+		var caster = going_key.replace("spell", "")
+		active_refs[caster].casting = false
+		calculate_turn_order()
+		#print(calculate_turn_order()[0])
+		execute_turn()
 	test_button_ready = true
+	calculate_turn_order()
 
 #region Turn Order Logic
 var conflict_resolution_order = []
 var initial_order = []
+var spell_conflict_resolution_order = []
 
 signal turn_order_calculated(order: Array)
 
@@ -93,8 +162,13 @@ func regenerate_conflict_resolution(last_went):
 
 func better_turn_order_algorithm(order: Array, cro: Array):
 	var avs = []
+	var spells = spell_conflict_resolution_order.duplicate()
+	if len(spells)>0:
+		for key in spells:
+			avs.append([key, get_active_spells()[key].action_value])
 	for key in cro:
 		avs.append([key, get_action_values()[key]])
+	
 	avs.sort_custom(func(a, b):
 		return a[1] < b[1]
 	)

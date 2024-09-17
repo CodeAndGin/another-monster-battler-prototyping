@@ -2,11 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="1_dioyj"]
 [ext_resource type="Script" path="res://Scripts/generic_mon.gd" id="1_whqcd"]
-[ext_resource type="PackedScene" uid="uid://bjexg6k45fm42" path="res://Gameplay Scenes/generic_basic_move.tscn" id="2_w20ky"]
+[ext_resource type="PackedScene" uid="uid://dw71obaptm2mo" path="res://Gameplay Scenes/generic_spell.tscn" id="2_54bwk"]
 
 [node name="TestMon" type="Node3D"]
 script = ExtResource("1_whqcd")
-move_list_scenes = [ExtResource("2_w20ky"), ExtResource("2_w20ky"), ExtResource("2_w20ky"), ExtResource("2_w20ky")]
+move_list_scenes = [ExtResource("2_54bwk")]
 
 [node name="FrontFace" type="Sprite3D" parent="."]
 centered = false
