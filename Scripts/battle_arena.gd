@@ -8,11 +8,22 @@ extends Node3D
 @onready var move_point_1 = $arena/MovePoint1
 @onready var move_point_2 = $arena/MovePoint2
 @onready var turn_order_display = $CanvasLayer/HUD/TurnOrderDisplay
+@onready var hud = $CanvasLayer/HUD
 
+#turn order testing
 @onready var av_input = $CanvasLayer/HUD/HBoxContainer/LineEdit
 @onready var cast_av_input = $CanvasLayer/HUD/CastSpellTester/CastAv
 @onready var cast_ct_input = $CanvasLayer/HUD/CastSpellTester/CastCt
 
+#event display and log
+@onready var event_display = $CanvasLayer/HUD/EventDisplay
+@onready var event_display_label = $CanvasLayer/HUD/EventDisplay/Label
+@onready var event_display_timer = $CanvasLayer/HUD/EventDisplay/Timer
+var display_event_queue: Array
+var display_event_log: Array
+@export var display_event_log_max_size = INF
+
+#testing spell
 @export var generic_spell: PackedScene
 
 var test_button_ready = false
@@ -45,6 +56,7 @@ func _on_cast_pressed() -> void:
 	if test_button_ready:
 		var going_key = calculate_turn_order()[0]
 		if cast_av_input.text == "" or cast_ct_input.text == "":
+			display_event_description("please enter a number")
 			print("please enter a number")
 			return
 		var going = active_refs[going_key]
@@ -67,7 +79,7 @@ func _on_cast_pressed() -> void:
 func connect_move_containers():
 	for key in active_refs:
 		active_refs[key].connected_move_container = move_container_refs[key + "spell"]
-		print(active_refs[key].connected_move_container)
+		#print(active_refs[key].connected_move_container)
 
 @onready var active_refs = \
 	{
@@ -128,6 +140,7 @@ func execute_turn():
 		for actor in active_refs:
 			active_refs[actor].action_value -= av_to_reduce
 	if going_key.contains("spell"):
+		display_event_description(going.display_name + " has been cast")
 		print(going.display_name + " has been cast")
 		going.cast_complete()
 		spell_conflict_resolution_order.pop_front()
@@ -137,8 +150,31 @@ func execute_turn():
 		calculate_turn_order()
 		#print(calculate_turn_order()[0])
 		execute_turn()
+		return
 	test_button_ready = true
+	display_event_description(active_refs[going_key].display_name + "'s turn")
+	print(active_refs[going_key].display_name + "'s turn")
 	calculate_turn_order()
+
+func display_event_log_append_and_truncate(text: String):
+	display_event_log.append(text)
+	while len(display_event_log) > display_event_log_max_size:
+		display_event_log.pop_front()
+
+func display_event_description(text: String):
+	display_event_queue.append(text)
+	if event_display_timer.time_left > 0: return
+	while len(display_event_queue) > 0:
+		#if event_display_timer.time_left > 0: await event_display_timer.timeout
+		var t = display_event_queue.pop_front()
+		display_event_log_append_and_truncate(t)
+		hud.regenerate_log()
+		event_display_label.text = t
+		event_display.show()
+		event_display_timer.start()
+		await event_display_timer.timeout
+		event_display.hide()
+		event_display_label.text = ""
 
 #region Turn Order Logic
 var conflict_resolution_order = []

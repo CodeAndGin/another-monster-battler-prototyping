@@ -26,3 +26,21 @@ func detoggle(active):
 	elif active == "Direct Order Menu":
 		$"Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button".button_pressed = false
 		$"Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button".toggled.emit(false)
+
+func _on_log_toggle_toggled(toggled_on: bool) -> void:
+	var labels = $EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer/EventDisplayLogLabels
+	if toggled_on:
+		regenerate_log()
+	$EventDisplayLog/PanelContainer.visible = toggled_on
+
+func regenerate_log():
+	var labels = $EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer/EventDisplayLogLabels
+	for label in labels.get_children():
+		label.queue_free()
+	var log = arena_root.display_event_log.duplicate()
+	log.reverse()
+	for entry in log:
+		var label = Label.new()
+		label.text = entry
+		label.horizontal_alignment=1
+		labels.add_child(label)

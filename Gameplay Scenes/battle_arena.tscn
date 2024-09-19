@@ -210,11 +210,67 @@ offset_right = -208.0
 offset_bottom = -76.0
 grow_horizontal = 0
 
+[node name="EventDisplay" type="PanelContainer" parent="CanvasLayer/HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = -207.0
+offset_bottom = 99.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/EventDisplay"]
+layout_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="CanvasLayer/HUD/EventDisplay"]
+one_shot = true
+
+[node name="EventDisplayLog" type="VBoxContainer" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_right = -210.0
+offset_bottom = 569.0
+grow_horizontal = 2
+
+[node name="LogToggle" type="Button" parent="CanvasLayer/HUD/EventDisplayLog"]
+layout_mode = 2
+toggle_mode = true
+text = "Toggle Display Log"
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD/EventDisplayLog"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="EventDisplayLogLabels" type="VBoxContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer/EventDisplayLogLabels"]
+layout_mode = 2
+text = "test"
+horizontal_alignment = 1
+
 [connection signal="turn_order_calculated" from="." to="CanvasLayer/HUD/TurnOrderDisplay" method="_on_battle_arena_turn_order_calculated"]
 [connection signal="pressed" from="CanvasLayer/HUD/HBoxContainer/Button" to="." method="_on_av_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/ButtonRandom" to="." method="_on_button_random_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/CastSpellTester/Cast" to="." method="_on_cast_pressed"]
 [connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Direct Order Button" to="CanvasLayer/HUD" method="_on_direct_order_button_toggled"]
 [connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button" to="CanvasLayer/HUD" method="_on_switch_monster_button_toggled"]
+[connection signal="toggled" from="CanvasLayer/HUD/EventDisplayLog/LogToggle" to="CanvasLayer/HUD" method="_on_log_toggle_toggled"]
 
 [editable path="CanvasLayer/HUD/Player Buttons"]
+[editable path="CanvasLayer/HUD/Direct Order Menu"]
