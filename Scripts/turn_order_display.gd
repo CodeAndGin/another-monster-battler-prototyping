@@ -36,7 +36,7 @@ func populate_list(order):
 		child.queue_free()
 	var labels: Array
 	for key in active_refs:
-		if active_refs[key] != null:
+		if active_refs[key] != null and order.has(key):
 			labels.append(Label.new())
 	#var labels = [Label.new(), Label.new(), Label.new(), Label.new()]
 	var turn_order = order

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="TacticsSetTemplate" load_steps=2 format=3 uid="uid://lgtslgyrlfyr"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/tactics_set_template.gd" id="1_w5r5o"]
+
+[resource]
+script = ExtResource("1_w5r5o")
+setA = {
+"Fifth": [null, null],
+"Fifth reaction": [null, null],
+"First": [null, null],
+"First reaction": [null, null],
+"Fourth": [null, null],
+"Fourth reaction": [null, null],
+"Second": [null, null],
+"Second reaction": [null, null],
+"Third": [null, null],
+"Third reaction": [null, null]
+}
+setB = {
+"Fifth": [null, null],
+"Fifth reaction": [null, null],
+"First": [null, null],
+"First reaction": [null, null],
+"Fourth": [null, null],
+"Fourth reaction": [null, null],
+"Second": [null, null],
+"Second reaction": [null, null],
+"Third": [null, null],
+"Third reaction": [null, null]
+}
