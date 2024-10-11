@@ -1,18 +1,33 @@
 extends Node3D
 
-#Internal Refs
+##### Main Battle Logic #####
+
+#### Variable and Signal Declarations ####
+
+#region Static Node References
 @onready var player_point_1 = $arena/PlayerPoint1
 @onready var player_point_2 = $arena/PlayerPoint2
 @onready var monster_point_1 = $arena/MonsterPoint1
 @onready var monster_point_2 = $arena/MonsterPoint2
 @onready var move_point_1 = $arena/MovePoint1
 @onready var move_point_2 = $arena/MovePoint2
+@onready var player_1_bench = $arena/Bench1
+@onready var player_2_bench = $arena/Bench2
 @onready var turn_order_display = $CanvasLayer/HUD/TurnOrderDisplay
 @onready var hud = $CanvasLayer/HUD
 
-@onready var player_1_bench = $arena/Bench1
-@onready var player_2_bench = $arena/Bench2
+#turn order testing
+@onready var av_input = $CanvasLayer/HUD/HBoxContainer/LineEdit
+@onready var cast_av_input = $CanvasLayer/HUD/CastSpellTester/CastAv
+@onready var cast_ct_input = $CanvasLayer/HUD/CastSpellTester/CastCt
 
+#event display and log
+@onready var event_display = $CanvasLayer/HUD/EventDisplay
+@onready var event_display_label = $CanvasLayer/HUD/EventDisplay/Label
+@onready var event_display_timer = $CanvasLayer/HUD/EventDisplay/Timer
+#endregion
+
+#region Changeable Node Reference Dictionaries
 @onready var active_refs = \
 	{
 		"player1": null,
@@ -61,27 +76,31 @@ extends Node3D
 			return bench_2_refs
 		set(value):
 			pass
+#endregion
 
-#turn order testing
-@onready var av_input = $CanvasLayer/HUD/HBoxContainer/LineEdit
-@onready var cast_av_input = $CanvasLayer/HUD/CastSpellTester/CastAv
-@onready var cast_ct_input = $CanvasLayer/HUD/CastSpellTester/CastCt
+#region Signals
+signal turn_complete
+signal to_go_complete
 
-#event display and log
-@onready var event_display = $CanvasLayer/HUD/EventDisplay
-@onready var event_display_label = $CanvasLayer/HUD/EventDisplay/Label
-@onready var event_display_timer = $CanvasLayer/HUD/EventDisplay/Timer
+signal round_begin
+signal round_end
+signal round_time_tick
+#endregion
+
+#region Log storage
 var display_event_queue: Array
 var display_event_log: Array
-@export var display_event_log_max_size = INF
 
-#testing spell
-@export var generic_spell: PackedScene
+##How many events to store in the event log. Unbounded if 0 or negative.
+@export var display_event_log_max_size = INF:
+	get:
+		if display_event_log_max_size <= 0: return INF
+		else: return  display_event_log_max_size
+#endregion
 
-var round_in_progress = false
-
+#region Global variables used in round/turn resolution
 var game_time = 0
-@export var tick_time_length = 0.25
+@export var tick_time_length = 0.25 ##Amount of time the game waits between rounds, spells added to stack, etc.
 
 var going_actor
 var going_actor_key
@@ -90,15 +109,31 @@ var to_go: Array
 var action_stack: Array
 var after_action_stack: Array
 
-signal turn_complete
-signal to_go_complete
+var round_in_progress = false
+#endregion
 
-signal round_begin
-signal round_end
-signal round_time_tick
+##testing spell
+@export var generic_spell: PackedScene
 
+#### Functions ####
 
-#region Test Buttons
+#region Ready and Process
+
+func _ready() -> void:
+	turn_order_calculated.connect(turn_order_display.populate_list)
+	generate_initial_order_random()
+	turn_order_calculated.emit(calculate_turn_order())
+	#execute_turn()
+	connect_move_containers()
+	event_display_timer.wait_time = tick_time_length
+
+func _process(delta: float) -> void:
+	if not round_in_progress:
+		round_in_progress = true
+		execute_round()
+#endregion
+
+#region Test Buttons Logic
 var test_button_ready = false
 func _on_av_test_pressed() -> void:
 	if test_button_ready:
@@ -183,6 +218,7 @@ func _on_cast_pressed() -> void:
 		#execute_turn()
 #endregion
 
+#region Utils
 func connect_move_containers():
 	for key in active_refs:
 		active_refs[key].connected_move_container = move_container_refs[key + "spell"]
@@ -194,19 +230,6 @@ func get_active_spells():
 		if len(move_container_refs[key].get_children()) > 0:
 			active_spells.get_or_add(key, move_container_refs[key].get_children()[0])
 	return active_spells
-
-func _ready() -> void:
-	turn_order_calculated.connect(turn_order_display.populate_list)
-	generate_initial_order_random()
-	turn_order_calculated.emit(calculate_turn_order())
-	#execute_turn()
-	connect_move_containers()
-	event_display_timer.wait_time = tick_time_length
-
-func _process(delta: float) -> void:
-	if not round_in_progress:
-		round_in_progress = true
-		execute_round()
 
 func get_action_values() -> Dictionary:
 	return {"player1": active_refs["player1"].action_value, \
@@ -242,7 +265,9 @@ func get_action_values() -> Dictionary:
 	#display_event_description(active_refs[going_key].display_name + "'s turn")
 	#print(active_refs[going_key].display_name + "'s turn")
 	#calculate_turn_order()
+#endregion
 
+#region Round and Turn Logic
 func execute_round():
 	#round start
 	#do player/monster turns
@@ -315,7 +340,9 @@ func resolve_action_stack():
 
 func resolve_after_action_stack():
 	pass
+#endregion
 
+#region Event Display and Logging
 func display_event_log_append_and_truncate(text: String):
 	display_event_log.append(text)
 	while len(display_event_log) > display_event_log_max_size:
@@ -335,8 +362,9 @@ func display_event_description(text: String):
 		await event_display_timer.timeout
 		event_display.hide()
 		event_display_label.text = ""
+#endregion
 
-#region Turn Order Logic
+#region Turn Order Computation
 var conflict_resolution_order = []
 #var initial_order = []
 var spell_conflict_resolution_order = []

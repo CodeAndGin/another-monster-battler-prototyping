@@ -26,8 +26,8 @@ glow_enabled = true
 
 [node name="BattleArena" type="Node3D"]
 script = ExtResource("1_rw6c8")
-generic_spell = ExtResource("2_8bg6a")
 tick_time_length = 0.22
+generic_spell = ExtResource("2_8bg6a")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_lhn0y")

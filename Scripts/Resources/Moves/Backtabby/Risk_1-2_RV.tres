@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="RandomRisk" load_steps=2 format=3 uid="uid://brhr7u4kudxyo"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/random_risk.gd" id="1_2ea1n"]
+
+[resource]
+script = ExtResource("1_2ea1n")
+type = 0
+move_name = "Risk 1-2 (RV)"
+_min = 1
+_max = 2
+av_cost = 0
+rv_cost = -2
+ct_cost = 0

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MonsterStats" load_steps=3 format=3 uid="uid://d1qb3jhb3wgfm"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/StatSheets/Monster_Stat_Sheet.gd" id="1_0kwuy"]
+[ext_resource type="PackedScene" uid="uid://dw71obaptm2mo" path="res://Gameplay Scenes/generic_spell.tscn" id="1_el0oe"]
+
+[resource]
+script = ExtResource("1_0kwuy")
+monster_name = "\"Test\""
+MAX_HP = 10.0
+MAX_RV = 10.0
+STARTING_RV = 10.0
+overcapping_rv = false
+move_list = [ExtResource("1_el0oe")]

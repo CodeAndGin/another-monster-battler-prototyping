@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dyrspx4uts25m"]
+
+[ext_resource type="Script" path="res://Scripts/generic_mon.gd" id="1_odvpc"]
+[ext_resource type="Resource" uid="uid://f2s6ruukqc4u" path="res://Scripts/Resources/StatSheets/BacktabbyStats.tres" id="2_w4xbo"]
+[ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="3_6c5y3"]
+
+[node name="Backtabby" type="Node3D"]
+script = ExtResource("1_odvpc")
+stat_sheet = ExtResource("2_w4xbo")
+
+[node name="FrontFace" type="Sprite3D" parent="."]
+centered = false
+offset = Vector2(-64, 0)
+modulate = Color(2.21401e-06, 0.680018, 0.370414, 1)
+double_sided = false
+texture = ExtResource("3_6c5y3")
+
+[node name="BackFace" type="Sprite3D" parent="."]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
+centered = false
+offset = Vector2(-64, 0)
+double_sided = false
+texture = ExtResource("3_6c5y3")

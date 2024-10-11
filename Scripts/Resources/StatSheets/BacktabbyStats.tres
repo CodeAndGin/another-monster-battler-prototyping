@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="MonsterStats" load_steps=3 format=3 uid="uid://f2s6ruukqc4u"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/StatSheets/Monster_Stat_Sheet.gd" id="1_k2ocw"]
+[ext_resource type="Resource" uid="uid://brhr7u4kudxyo" path="res://Scripts/Resources/Moves/Backtabby/Risk_1-2_RV.tres" id="1_vgkam"]
+
+[resource]
+script = ExtResource("1_k2ocw")
+monster_name = "Backtabby"
+MAX_HP = 29.0
+MAX_RV = 12.0
+STARTING_RV = 6.0
+overcapping_rv = false
+move_list = [ExtResource("1_vgkam")]
