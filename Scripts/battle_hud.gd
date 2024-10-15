@@ -15,7 +15,7 @@ func _ready() -> void:
 func _on_direct_order_button_toggled(toggled_on: bool) -> void:
 	if toggled_on: detoggle("Direct Order Menu")
 	#test version that does work, but need to register which player is pressing somehow; we'll get there
-	#if arena_root.monster_point_1: direct_order_menu.populate_buttons(arena_root.monster_point_1.get_children()[0].move_list)
+	if arena_root.monster_point_player_1: direct_order_menu.populate_buttons(arena_root.monster_point_player_1.get_children()[0].move_list)
 	direct_order_menu.visible = toggled_on
 
 func _on_switch_monster_button_toggled(toggled_on: bool) -> void:
@@ -68,7 +68,7 @@ func reset_all_buttons():
 
 func _on_confirm_pressed() -> void:
 	if switch_mon_menu.button1.button_pressed:
-		arena_root.swap_monster("monster1")
+		arena_root.swap_monster("bmonster1")
 	if switch_mon_menu.button2.button_pressed:
-		arena_root.swap_monster("monster2")
+		arena_root.swap_monster("bmonster2")
 	reset_all_buttons()

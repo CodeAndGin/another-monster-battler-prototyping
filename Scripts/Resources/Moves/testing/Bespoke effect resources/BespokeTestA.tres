@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="BespokeEffectTestA" load_steps=2 format=3 uid="uid://c4extr6t0e2hy"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/testing/Bespoke effect scripts/bespoke_effect_test.gd" id="1_gpudr"]
+
+[resource]
+script = ExtResource("1_gpudr")

@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="BespokeEffectTestB" load_steps=2 format=3 uid="uid://bkd36f8qaa686"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/testing/Bespoke effect scripts/bespoke_effect_test_b.gd" id="1_hokhc"]
+
+[resource]
+script = ExtResource("1_hokhc")

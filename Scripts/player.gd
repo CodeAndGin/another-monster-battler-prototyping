@@ -1,4 +1,5 @@
 extends Camera3D
+class_name Player
 
 @export var type = "player"
 

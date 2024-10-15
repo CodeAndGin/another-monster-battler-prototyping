@@ -19,6 +19,17 @@ enum MoveTypes \
 	INSTANT_COMBO
 }
 
+enum MoveEffectTypes \
+{
+	DAMAGE,
+	HEAL,
+	RISK,
+	GUARD,
+	SHIELD,
+	POISON,
+	BURN
+}
+
 enum DamageTypes \
 {
 	MAGICAL,
@@ -26,3 +37,55 @@ enum DamageTypes \
 	STATUS,
 	FIELD
 }
+
+enum DamageContactTypes \
+{
+	DIRECT,
+	INDIRECT,
+	NONE
+}
+
+
+
+#enum Comparisons \
+#{
+	#IS,
+	#IS_NOT,
+	#IS_EQUAL_TO,
+	#IS_NOT_EQUAL_TO,
+	#IS_LESS_THAN,
+	#IS_NOT_LESS_THAN,
+	#IS_LESS_THAN_OR_EQUAL_TO,
+	#IS_NOT_LESS_THAN_OR_EQUAL_TO,
+	#IS_GREATER_THAN,
+	#IS_NOT_GREATER_THAN,
+	#IS_GREATER_THAN_OR_EQUAL_TO,
+	#IS_NOT_GREATER_THAN_OR_EQUAL_TO,
+	#ELSE
+#}
+#
+#enum Targets \
+#{
+	#SELF,
+	#ACTIVE_ALLY,
+	#BENCH_ALLY_1,
+	#BENCH_ALLY_2,
+	#ACTIVE_OPPONENT,
+	#BENCH_OPPONENT_1,
+	#BENCH_OPPONENT_2,
+	#ANY
+#}
+#
+#enum Values \
+#{
+	#AV,
+	#RV,
+	#CT,
+	#HP,
+	#MAX_HP,
+	#RISK,
+	#GUARD,
+	#SHIELD,
+	#DIRECT_ORDERED,
+	#ANY
+#}

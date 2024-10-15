@@ -11,23 +11,23 @@ var active_refs = \
 	{
 		"player1": null,
 		"player2": null,
-		"monster1" : null,
-		"monster2" : null,
+		"player1monster" : null,
+		"player2monster" : null,
 		"player1spell": null,
 		"player2spell": null,
-		"monster1spell": null,
-		"monster2spell": null,
+		"player1monsterspell": null,
+		"player2monsterspell": null,
 	}
 
 func get_refs():
 	active_refs["player1"] = battle_controller.active_refs["player1"]
 	active_refs["player2"] = battle_controller.active_refs["player2"]
-	active_refs["monster1"] = battle_controller.active_refs["monster1"]
-	active_refs["monster2"] = battle_controller.active_refs["monster2"]
+	active_refs["player1monster"] = battle_controller.active_refs["player1monster"]
+	active_refs["player2monster"] = battle_controller.active_refs["player2monster"]
 	active_refs["player1spell"] = battle_controller.move_container_refs["player1spell"].get_children()[0] if len(battle_controller.move_container_refs["player1spell"].get_children()) > 0 else null
 	active_refs["player2spell"] = battle_controller.move_container_refs["player2spell"].get_children()[0] if len(battle_controller.move_container_refs["player2spell"].get_children()) > 0 else null
-	active_refs["monster1spell"] = battle_controller.move_container_refs["monster1spell"].get_children()[0] if len(battle_controller.move_container_refs["monster1spell"].get_children()) > 0 else null
-	active_refs["monster2spell"] = battle_controller.move_container_refs["monster2spell"].get_children()[0] if len(battle_controller.move_container_refs["monster2spell"].get_children()) > 0 else null
+	active_refs["player1monsterspell"] = battle_controller.move_container_refs["player1monsterspell"].get_children()[0] if len(battle_controller.move_container_refs["player1monsterspell"].get_children()) > 0 else null
+	active_refs["player2monsterspell"] = battle_controller.move_container_refs["player2monsterspell"].get_children()[0] if len(battle_controller.move_container_refs["player2monsterspell"].get_children()) > 0 else null
 
 func populate_list(order):
 	#clear list
