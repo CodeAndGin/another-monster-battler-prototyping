@@ -8,6 +8,7 @@
 
 [sub_resource type="Resource" id="Resource_l076m"]
 script = ExtResource("3_i8gsi")
+default_set_is_A = true
 setA = {
 "Fifth": [null, null],
 "Fifth reaction": [null, null],

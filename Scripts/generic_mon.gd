@@ -53,18 +53,22 @@ var casting = false
 var move_list: Array
 
 func test_tactics_set():
+	if not tactics_sheet: return
 	if FuncUtils.evaluate(tactics_sheet.setA["First"][0], FuncUtils.get_condition_variable_names(), FuncUtils.get_condition_variable_values(self, arena)):
 		tactics_sheet.setA["First"][1].bespoke_effect.bespoke_effect()
 	else:
 		print("condition not met")
 
 func _ready() -> void:
-	MAX_HP = stat_sheet.MAX_HP
-	MAX_RV = stat_sheet.MAX_RV
-	reaction_value = stat_sheet.STARTING_RV
-	overcapping_rv = stat_sheet.overcapping_rv
-	monster_name = stat_sheet.monster_name
-	move_list = stat_sheet.move_list
+	if stat_sheet:
+		MAX_HP = stat_sheet.MAX_HP
+		MAX_RV = stat_sheet.MAX_RV
+		reaction_value = stat_sheet.STARTING_RV
+		overcapping_rv = stat_sheet.overcapping_rv
+		monster_name = stat_sheet.monster_name
+		move_list = stat_sheet.move_list
+	if tactics_sheet:
+		active_tactics_set_is_A = tactics_sheet.default_set_is_A
 	#for i in range(50): move_list_scenes.append(generic_move)
 	#for move in move_list_scenes:
 	#	move_list.append(move.instantiate())
@@ -72,3 +76,6 @@ func _ready() -> void:
 
 func check_connected_move_container(container: Node3D):
 	return container == connected_move_container
+
+func take_physical_damage():
+	pass

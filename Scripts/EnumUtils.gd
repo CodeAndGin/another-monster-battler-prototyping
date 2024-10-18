@@ -1,48 +1,49 @@
 class_name EnumUtils
 
-enum MoveTypes \
+enum ActionTypes \
 {
-	INSTANT,
-	ACTION,
-	INSTANT_ACTION,
+	SKILL,
 	SPELL,
-	INSTANT_SPELL, #probably meaningless
-	REACTION,
-	INSTANT_REACTION, #probably meaningless
 	FIELD,
-	INSTANT_FIELD,
 	TRAP,
-	INSTANT_TRAP,
 	CHANNEL,
-	INSTANT_CHANNEL, #probably meaningless
 	COMBO,
-	INSTANT_COMBO
+	BUFF,
+	DEBUFF
 }
 
 enum MoveEffectTypes \
 {
-	DAMAGE,
+	PHYS_DAMAGE,
+	MAG_DAMAGE,
+	STAT_DAMAGE,
 	HEAL,
+	RALLY,
 	RISK,
 	GUARD,
 	SHIELD,
 	POISON,
-	BURN
+	BURN,
+	BESPOKE
 }
 
 enum DamageTypes \
 {
 	MAGICAL,
 	PHYSICAL,
-	STATUS,
-	FIELD
+	STATUS
 }
 
-enum DamageContactTypes \
+enum Ranges \
 {
-	DIRECT,
-	INDIRECT,
-	NONE
+	MELEE,
+	RANGED
+}
+
+enum TargetTypes \
+{
+	SELF,
+	OPPONENT,
 }
 
 

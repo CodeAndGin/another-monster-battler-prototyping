@@ -119,6 +119,7 @@ var spell_conflict_resolution_order = []
 
 ##testing spell
 @export var generic_spell: PackedScene
+@export var test_move: Action
 
 #### Functions ####
 
@@ -133,6 +134,7 @@ func _ready() -> void:
 	event_display_timer.wait_time = tick_time_length
 
 func _process(_delta: float) -> void:
+	#print(active_refs["player1monster"].sharpened if "sharpened" in active_refs["player1monster"] else null)#checks if the variable exists!!!
 	if not round_in_progress:
 		round_in_progress = true
 		execute_round()
@@ -165,8 +167,9 @@ func _on_av_test_pressed() -> void:
 
 func _on_button_random_pressed() -> void:
 	if test_button_ready:
-		if going_actor_key.contains("monster"):
-			going_actor.test_tactics_set()
+		#var b = test_move.copy(active_refs["player1monster"], active_refs["player1monster"])
+		#b.resolve()
+		action_stack.pop_front()
 		var new_av = randi() % 7 + 1
 		regenerate_conflict_resolution(going_actor_key)
 		going_actor.action_value += new_av

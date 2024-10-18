@@ -1,6 +1,8 @@
 extends Resource
 class_name TacticsSetTemplate
 
+@export var default_set_is_A = true
+
 @export var setA = \
 {
 	"First": [null, null],

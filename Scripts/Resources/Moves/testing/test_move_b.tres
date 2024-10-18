@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Move" load_steps=3 format=3 uid="uid://ha3xg5xk0d6m"]
 
-[ext_resource type="Script" path="res://Scripts/Resources/Moves/move.gd" id="1_do0oe"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/Action.gd" id="1_do0oe"]
 [ext_resource type="Resource" uid="uid://bkd36f8qaa686" path="res://Scripts/Resources/Moves/testing/Bespoke effect resources/BespokeTestB.tres" id="1_wa0p4"]
 
 [resource]

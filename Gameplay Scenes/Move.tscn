@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bnbuk7wg3g8he"]
+
+[ext_resource type="Script" path="res://Scripts/move_scene.gd" id="1_bdeva"]
+
+[node name="Move" type="Node3D"]
+script = ExtResource("1_bdeva")

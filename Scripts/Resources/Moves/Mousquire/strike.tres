@@ -1,0 +1,34 @@
+[gd_resource type="Resource" script_class="Action" load_steps=2 format=3 uid="uid://cwxcepeg42umk"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/Action.gd" id="1_q1sr5"]
+
+[resource]
+script = ExtResource("1_q1sr5")
+move_type = 0
+move_name = "Strike"
+is_melee = true
+is_instant = false
+internal_order_of_effects = Array[int]([0, 1])
+_min_phys_damage = 3
+_max_phys_damage = 3
+_min_mag_damage = 0
+_max_mag_damage = 0
+_min_stat_damage = 0
+_max_stat_damage = 0
+_min_heal = 0
+_max_heal = 0
+_min_rally = 0
+_max_rally = 0
+_min_risk = 0
+_max_risk = 0
+_min_guard = 0
+_max_guard = 0
+_min_shield = 0
+_max_shield = 0
+_min_poison = 0
+_max_poison = 0
+_min_burn = 0
+_max_burn = 0
+av_cost = 3
+rv_cost = 0
+ct_cost = 0
