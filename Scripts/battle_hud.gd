@@ -5,8 +5,11 @@ extends Control
 @onready var switch_mon_button = $"Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button"
 @onready var direct_order_menu = $"Direct Order Menu"
 @onready var direct_order_button = $"Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Direct Order Button"
-
+@onready var healthbars = $Healthbars
 var weird_scaling_fix_used = false
+
+func _process(delta: float) -> void:
+	update_healthbars()
 
 func _ready() -> void:
 	switch_mon_menu.populate_buttons($"../../arena/Bench1") #populate causes weird scaling on first use no idea why; this mitigates the issue
@@ -72,3 +75,35 @@ func _on_confirm_pressed() -> void:
 	if switch_mon_menu.button2.button_pressed:
 		arena_root.swap_monster("bmonster2")
 	reset_all_buttons()
+
+
+func _on_battle_arena_turn_begin(goer: Variant) -> void:
+	$strikeTest.visible = false
+	if goer is Monster:
+		$strikeTest.visible = true
+
+func update_healthbars():
+	healthbars.get_node("P1/MonHealthBar1").draw_bar(
+	arena_root.active_refs["player1monster"].display_name, 
+	arena_root.active_refs["player1monster"].hp, 
+	arena_root.active_refs["player1monster"].MAX_HP)
+	healthbars.get_node("P1/MonHealthBar2").draw_bar(
+	arena_root.bench_1_refs["bmonster1"].display_name, 
+	arena_root.bench_1_refs["bmonster1"].hp, 
+	arena_root.bench_1_refs["bmonster1"].MAX_HP)
+	healthbars.get_node("P1/MonHealthBar3").draw_bar(
+	arena_root.bench_1_refs["bmonster2"].display_name, 
+	arena_root.bench_1_refs["bmonster2"].hp, 
+	arena_root.bench_1_refs["bmonster2"].MAX_HP)
+	healthbars.get_node("P2/MonHealthBar1").draw_bar(
+	arena_root.active_refs["player2monster"].display_name, 
+	arena_root.active_refs["player2monster"].hp, 
+	arena_root.active_refs["player2monster"].MAX_HP)
+	healthbars.get_node("P2/MonHealthBar2").draw_bar(
+	arena_root.bench_2_refs["bmonster1"].display_name, 
+	arena_root.bench_2_refs["bmonster1"].hp, 
+	arena_root.bench_2_refs["bmonster1"].MAX_HP)
+	healthbars.get_node("P2/MonHealthBar3").draw_bar(
+	arena_root.bench_2_refs["bmonster2"].display_name, 
+	arena_root.bench_2_refs["bmonster2"].hp, 
+	arena_root.bench_2_refs["bmonster2"].MAX_HP)

@@ -79,6 +79,7 @@ class_name Arena
 #endregion
 
 #region Signals
+signal turn_begin(goer)
 signal turn_complete
 signal to_go_complete
 
@@ -104,7 +105,7 @@ var display_event_log: Array
 var game_time = 0
 @export var tick_time_length = 0.25 ##Amount of time the game waits between rounds, spells added to stack, etc.
 
-var going_actor
+var going_actor: Actor
 var going_actor_key
 var to_go: Array
 
@@ -132,6 +133,10 @@ func _ready() -> void:
 	#execute_turn()
 	connect_move_containers()
 	event_display_timer.wait_time = tick_time_length
+	update_keys_on_monsters()
+
+func test():
+	print("tested")
 
 func _process(_delta: float) -> void:
 	#print(active_refs["player1monster"].sharpened if "sharpened" in active_refs["player1monster"] else null)#checks if the variable exists!!!
@@ -226,6 +231,18 @@ func _on_cast_pressed() -> void:
 			##initial_order.pop_front()
 		#turn_order_calculated.emit(calculate_turn_order())
 		#execute_turn()
+
+func _on_strike_test_pressed() -> void:
+	if test_button_ready:
+		display_event_description(going_actor.display_name + " used " + going_actor.move_list[0].move_name)
+		going_actor.move_list[0].add_to_action_stack(self, going_actor, active_refs[going_actor.opponent_key])
+		resolve_action_stack()
+		test_button_ready = false
+		going_actor = null
+		going_actor_key = null
+		turn_order_calculated.emit(calculate_turn_order())
+		turn_complete.emit()
+
 #endregion
 
 #region Utils
@@ -260,6 +277,12 @@ func update_keys_on_monsters():
 
 #region Round and Turn Logic
 func execute_round():
+	print(active_refs["player1monster"].display_name + "'s HP: %s" % active_refs["player1monster"].hp)
+	print(bench_1_refs["bmonster1"].display_name + "'s HP: %s" % bench_1_refs["bmonster1"].hp)
+	print(bench_1_refs["bmonster2"].display_name + "'s HP: %s" % bench_1_refs["bmonster2"].hp)
+	print(active_refs["player2monster"].display_name + "'s HP: %s" % active_refs["player2monster"].hp)
+	print(bench_2_refs["bmonster1"].display_name + "'s HP: %s" % bench_1_refs["bmonster1"].hp)
+	print(bench_2_refs["bmonster2"].display_name + "'s HP: %s" % bench_1_refs["bmonster2"].hp)
 	#round start
 	#do player/monster turns
 	#starts calling for player/monster turns
@@ -312,6 +335,7 @@ func execute_to_go():
 func execute_new_turn(actor: String):
 	going_actor_key = actor
 	going_actor = active_refs[going_actor_key]
+	turn_begin.emit(going_actor)
 	test_button_ready = true
 	display_event_description(going_actor.display_name + "'s turn")
 	print(going_actor.display_name + "'s turn")
@@ -319,15 +343,8 @@ func execute_new_turn(actor: String):
 func resolve_action_stack():
 	#placeholder code for test spells
 	while len(action_stack) > 0:
-		var action_key = action_stack.pop_back()
-		if action_key.contains("spell"):
-			var action = get_active_spells()[action_key]
-			display_event_description(action.display_name + " has been cast")
-			print(action.display_name + " has been cast")
-			action.cast_complete()
-			for n in move_container_refs[action_key].get_children(): move_container_refs[action_key].remove_child(n)
-			var caster = action_key.replace("spell", "")
-			active_refs[caster].casting = false
+		var action = action_stack.pop_back()
+		action.resolve()
 
 func resolve_after_action_stack():
 	pass
@@ -447,6 +464,8 @@ func swap_monster(monster_to_swap: String): #for player swapping; either a refac
 	#cleanup move containers
 	out_mon.connected_move_container = null
 	connect_move_containers()
+	
+	update_keys_on_monsters()
 	
 	#update AVs and turn order neccesary stuff
 	going_actor.action_value += 3

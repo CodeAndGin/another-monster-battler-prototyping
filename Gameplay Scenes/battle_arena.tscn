@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://dafxi6djap6hu"]
+[gd_scene load_steps=16 format=3 uid="uid://dafxi6djap6hu"]
 
 [ext_resource type="Script" path="res://Scripts/battle_arena.gd" id="1_rw6c8"]
 [ext_resource type="PackedScene" uid="uid://b7mxqokcravnv" path="res://Gameplay Scenes/arena.tscn" id="1_ygb6g"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://c5114u4538jg4" path="res://UI Scenes/player_buttons.tscn" id="6_uxm72"]
 [ext_resource type="PackedScene" uid="uid://dphxdtiqku0tt" path="res://UI Scenes/direct_order_menu.tscn" id="7_mejuj"]
 [ext_resource type="PackedScene" uid="uid://dij256j18u2pw" path="res://UI Scenes/switch_mon_menu.tscn" id="8_756s2"]
+[ext_resource type="PackedScene" uid="uid://4ogvq3skswfl" path="res://UI Scenes/mon_health_bar.tscn" id="12_dmapu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcgp1"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -79,7 +80,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.06, 0)
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
 arena = NodePath("../../..")
 display_name = "Mon A Two"
-hp = -5.0
 
 [node name="Bench1" type="Node3D" parent="arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99404, 0, -1.53998)
@@ -174,6 +174,21 @@ offset_bottom = -42.0
 grow_horizontal = 0
 grow_vertical = 0
 text = "apply random av"
+
+[node name="strikeTest" type="Button" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -173.0
+offset_top = -174.0
+offset_right = -35.0
+offset_bottom = -143.0
+grow_horizontal = 0
+grow_vertical = 0
+text = "test strike"
 
 [node name="CastSpellTester" type="HBoxContainer" parent="CanvasLayer/HUD"]
 layout_mode = 1
@@ -285,9 +300,108 @@ vertical_alignment = 1
 [node name="Timer" type="Timer" parent="CanvasLayer/HUD/EventDisplay"]
 one_shot = true
 
+[node name="Healthbars" type="Control" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchor_right = 1.0
+anchor_bottom = 0.332
+offset_left = 2.0
+offset_top = 30.0
+offset_right = -205.0
+offset_bottom = -0.136017
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="P1" type="Control" parent="CanvasLayer/HUD/Healthbars"]
+layout_mode = 1
+anchor_right = 0.301
+anchor_bottom = 0.827
+offset_right = -0.445038
+offset_bottom = 0.00498962
+
+[node name="MonHealthBar1" parent="CanvasLayer/HUD/Healthbars/P1" instance=ExtResource("12_dmapu")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.004
+anchor_right = 1.007
+anchor_bottom = 0.327
+offset_left = 0.136
+offset_top = -2.0
+offset_right = 0.0119629
+offset_bottom = -0.031002
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="MonHealthBar2" parent="CanvasLayer/HUD/Healthbars/P1" instance=ExtResource("12_dmapu")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.004
+anchor_top = 0.314
+anchor_right = 1.007
+anchor_bottom = 0.654
+offset_left = 0.136
+offset_top = -0.0419998
+offset_right = 0.0119629
+offset_bottom = -0.0620041
+
+[node name="MonHealthBar3" parent="CanvasLayer/HUD/Healthbars/P1" instance=ExtResource("12_dmapu")]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.654
+anchor_bottom = 0.993
+offset_left = -1.0
+offset_top = -0.0620041
+offset_right = 2.0
+offset_bottom = 0.0709991
+
+[node name="P2" type="Control" parent="CanvasLayer/HUD/Healthbars"]
+layout_mode = 1
+anchor_left = 0.697
+anchor_right = 0.998
+anchor_bottom = 0.827
+offset_left = 0.334961
+offset_right = -0.110046
+offset_bottom = 0.00498962
+
+[node name="MonHealthBar1" parent="CanvasLayer/HUD/Healthbars/P2" instance=ExtResource("12_dmapu")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.004
+anchor_right = 1.007
+anchor_bottom = 0.327
+offset_left = 0.136
+offset_top = -2.0
+offset_right = 0.0119629
+offset_bottom = -0.031002
+grow_horizontal = 1
+grow_vertical = 1
+
+[node name="MonHealthBar2" parent="CanvasLayer/HUD/Healthbars/P2" instance=ExtResource("12_dmapu")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = -0.004
+anchor_top = 0.314
+anchor_right = 1.007
+anchor_bottom = 0.654
+offset_left = 0.136
+offset_top = -0.0419998
+offset_right = 0.0119629
+offset_bottom = -0.0620041
+
+[node name="MonHealthBar3" parent="CanvasLayer/HUD/Healthbars/P2" instance=ExtResource("12_dmapu")]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.654
+anchor_bottom = 0.993
+offset_left = -1.0
+offset_top = -0.0620041
+offset_right = 2.0
+offset_bottom = 0.0709991
+
+[connection signal="turn_begin" from="." to="CanvasLayer/HUD" method="_on_battle_arena_turn_begin"]
 [connection signal="turn_order_calculated" from="." to="CanvasLayer/HUD/TurnOrderDisplay" method="_on_battle_arena_turn_order_calculated"]
 [connection signal="pressed" from="CanvasLayer/HUD/HBoxContainer/Button" to="." method="_on_av_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/ButtonRandom" to="." method="_on_button_random_pressed"]
+[connection signal="pressed" from="CanvasLayer/HUD/strikeTest" to="." method="_on_strike_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/CastSpellTester/Cast" to="." method="_on_cast_pressed"]
 [connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Direct Order Button" to="CanvasLayer/HUD" method="_on_direct_order_button_toggled"]
 [connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button" to="CanvasLayer/HUD" method="_on_switch_monster_button_toggled"]

@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3 uid="uid://4ogvq3skswfl"]
+
+[ext_resource type="Script" path="res://UI Scenes/mon_health_bar.gd" id="1_p4tvw"]
+
+[node name="MonHealthBar" type="PanelContainer" node_paths=PackedStringArray("name_box", "health_bar", "amount")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_p4tvw")
+name_box = NodePath("VBoxContainer/Name")
+health_bar = NodePath("VBoxContainer/HealthBar")
+amount = NodePath("VBoxContainer/HealthBar/Amount")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Name" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="HealthBar" type="ProgressBar" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+show_percentage = false
+
+[node name="Amount" type="Label" parent="VBoxContainer/HealthBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1

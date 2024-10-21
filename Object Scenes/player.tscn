@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://Scripts/player.gd" id="1_txhni"]
 
-[node name="Player" type="Camera3D"]
+[node name="Player" type="Camera3D" node_paths=PackedStringArray("camera")]
 fov = 34.1
 script = ExtResource("1_txhni")
+camera = NodePath(".")

@@ -1,56 +1,33 @@
-extends Node3D
+extends Actor
 class_name Monster
 
 @export var stat_sheet: MonsterStats
 @export var tactics_sheet: TacticsSetTemplate
 var active_tactics_set_is_A = true
-@export var arena: Arena
-
-@export var type = "monster"
-var monster_name: String
-@export var display_name = ""
 
 var own_key = ""
 var opponent_key:
 	get:
-		return "player2monster" if own_key == "player1monster" else "player1monster"
+		if own_key.contains("monster"):
+			return "player2monster" if own_key == "player1monster" else "player1monster"
+		return ""
 
-var av = 0 #private container, do not use
-var action_value:
+var MAX_HP: int
+var STARTING_HP: int
+@export var hp: int:
 	get:
-		if casting:
-			return av + connected_move_container.get_children()[0].action_value
-		return av
+		return hp
 	set(value):
-		var change = value-action_value
-		if change > 0:
-			av += change
-		if change < 0:
-			if casting:
-				if connected_move_container.get_children()[0].action_value + change >= 0:
-					connected_move_container.get_children()[0].action_value += change
-					return
-				else:
-					change += connected_move_container.get_children()[0].action_value
-					connected_move_container.get_children()[0].action_value = 0
-					av += change
-					return
-			av += change
+		var v = value
+		if v < 0: v = 0
+		hp = v
+		if hp <= 0: pass #KO check here?
 
-var reaction_value: float
-var MAX_RV: float
-var overcapping_rv: bool
-
-var MAX_HP: float
-@export var hp: float
-
-var risk_and_guard: float
-
-var connected_move_container: Node3D
-var casting = false
-#@onready var generic_move = preload("res://Gameplay Scenes/generic_basic_move.tscn")
+var risk_and_guard: int
 
 var move_list: Array
+
+var exposed: bool = false
 
 func test_tactics_set():
 	if not tactics_sheet: return
@@ -60,12 +37,14 @@ func test_tactics_set():
 		print("condition not met")
 
 func _ready() -> void:
+	super() #calls parent class' _ready()
 	if stat_sheet:
 		MAX_HP = stat_sheet.MAX_HP
+		STARTING_HP = stat_sheet.STARTING_HP
 		MAX_RV = stat_sheet.MAX_RV
-		reaction_value = stat_sheet.STARTING_RV
+		rv = stat_sheet.STARTING_RV
 		overcapping_rv = stat_sheet.overcapping_rv
-		monster_name = stat_sheet.monster_name
+		default_name = stat_sheet.monster_name
 		move_list = stat_sheet.move_list
 	if tactics_sheet:
 		active_tactics_set_is_A = tactics_sheet.default_set_is_A
@@ -73,9 +52,51 @@ func _ready() -> void:
 	#for move in move_list_scenes:
 	#	move_list.append(move.instantiate())
 	#for i in len(move_list): move_list[i].move_name = "Test %s" % (i+1)
+	hp = STARTING_HP
 
-func check_connected_move_container(container: Node3D):
-	return container == connected_move_container
 
-func take_physical_damage():
-	pass
+func take_damage_to_shield(amount: int) -> int:
+	return amount
+
+#func simulated_take_damage_to_shield(amount: int) -> int:
+	#return amount
+
+func take_physical_damage(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	if risk_and_guard > 0:
+		while risk_and_guard > 0 or to_take > 0:
+			to_take -= 1
+			risk_and_guard -= 1
+	elif risk_and_guard < 0:
+		var to_boost = to_take
+		while risk_and_guard < 0 or to_boost > 0:
+			to_take += 2 if exposed else 1
+			risk_and_guard += 1
+			to_boost -= 1
+	to_take = take_damage_to_shield(to_take)
+	if to_take <= 0: return
+	hp -= to_take
+
+#func simulated_take_physical_damage(amount: int, results: SimulationResult):
+	#if amount <= 0:
+		#return results
+	#var to_take = amount
+	#var simulated_risk_and_guard = risk_and_guard
+	#if simulated_risk_and_guard > 0:
+		#while simulated_risk_and_guard > 0 or to_take > 0:
+			#to_take -= 1
+			#simulated_risk_and_guard -= 1
+			#results.guard_used += 1
+	#elif simulated_risk_and_guard < 0:
+		#var to_boost = to_take
+		#while simulated_risk_and_guard < 0 or to_boost > 0:
+			#to_take += 2 if exposed else 1
+			#simulated_risk_and_guard += 1
+			#to_boost -= 1
+			#results.risk_used += 1
+	#to_take = simulated_take_damage_to_shield(to_take)
+	#results.resulting_risk_and_guard += simulated_risk_and_guard - risk_and_guard
+	#results.phys_damage_taken = to_take
+	#results.resulting_hp -= to_take
+	#return to_take

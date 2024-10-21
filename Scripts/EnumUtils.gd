@@ -44,9 +44,14 @@ enum TargetTypes \
 {
 	SELF,
 	OPPONENT,
+	ALLY
 }
 
-
+enum ActorTypes \
+{
+	PLAYER,
+	MONSTER
+}
 
 #enum Comparisons \
 #{
