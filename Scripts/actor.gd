@@ -47,3 +47,6 @@ func _ready() -> void:
 		if arena.name != "BattleArena":
 			find_arena()
 	if not arena: find_arena()
+
+func gain_shield(amount: int): #TODO: implement shield
+	pass

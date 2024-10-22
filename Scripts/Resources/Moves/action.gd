@@ -79,7 +79,7 @@ func check_if_can_use_on_target(_user: Actor, _target: Actor) -> bool:
 	return bespoke_target_check.bespoke_target_check(_user, _target)
 
 func add_to_action_stack(arena: Arena, _user: Actor, _target: Monster):
-	arena.action_stack.append(self.copy(_user, _target))
+	arena.add_move_to_stack(self.copy(_user, _target))
 
 #func simulated_resolve():
 	#if not user and target:
@@ -102,11 +102,34 @@ func resolve():
 	if len(internal_order_of_effects) < 1:
 		printerr("DEBUG: Please specify order of effects to resolve in the internal_order_of_effects array")
 		return
+	if target is not Monster:
+		printerr("DEBUG: Actions should only target monsters. Current target: " + target.display_name)
+		return
 	user.action_value += av_cost
 	for type in internal_order_of_effects:
 		match type:
 			EnumUtils.MoveEffectTypes.PHYS_DAMAGE:
 				target.take_physical_damage(calculated_phys_damage_amount)
+			EnumUtils.MoveEffectTypes.MAG_DAMAGE:
+				target.take_magical_damage(calculated_mag_damage_amount)
+			EnumUtils.MoveEffectTypes.STAT_DAMAGE:
+				target.take_status_damage(calculated_stat_damage_amount)
+			EnumUtils.MoveEffectTypes.HEAL:
+				user.heal(calculated_heal_amount)
+			EnumUtils.MoveEffectTypes.RALLY:
+				user.rally(calculated_rally_amount)
+			EnumUtils.MoveEffectTypes.RISK:
+				target.take_risk(calculated_risk_amount)
+			EnumUtils.MoveEffectTypes.GUARD:
+				user.gain_guard(calculated_guard_amount)
+			EnumUtils.MoveEffectTypes.SHIELD:
+				user.gain_shield(calculated_shield_amount)
+			EnumUtils.MoveEffectTypes.POISON:
+				target.take_poison(calculated_poison_amount)
+			EnumUtils.MoveEffectTypes.BURN:
+				target.take_burn(calculated_burn_amount)
+			EnumUtils.MoveEffectTypes.BESPOKE:
+				bespoke_effect.bespoke_effect(user, target)
 			_:
 				printerr("DEBUG: Chosen type " + EnumUtils.MoveEffectTypes.keys()[type] + " is not recognised")
 	

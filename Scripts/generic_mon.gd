@@ -29,6 +29,9 @@ var move_list: Array
 
 var exposed: bool = false
 
+var poison: int
+var burn: int
+
 func test_tactics_set():
 	if not tactics_sheet: return
 	if FuncUtils.evaluate(tactics_sheet.setA["First"][0], FuncUtils.get_condition_variable_names(), FuncUtils.get_condition_variable_values(self, arena)):
@@ -61,14 +64,15 @@ func take_damage_to_shield(amount: int) -> int:
 #func simulated_take_damage_to_shield(amount: int) -> int:
 	#return amount
 
+#region functions to add Damage, risk, poison, etc.
 func take_physical_damage(amount: int):
 	if amount <= 0: return
 	var to_take = amount
-	if risk_and_guard > 0:
+	if risk_and_guard > 0: #guard
 		while risk_and_guard > 0 or to_take > 0:
 			to_take -= 1
 			risk_and_guard -= 1
-	elif risk_and_guard < 0:
+	elif risk_and_guard < 0: #risk
 		var to_boost = to_take
 		while risk_and_guard < 0 or to_boost > 0:
 			to_take += 2 if exposed else 1
@@ -77,6 +81,86 @@ func take_physical_damage(amount: int):
 	to_take = take_damage_to_shield(to_take)
 	if to_take <= 0: return
 	hp -= to_take
+
+func take_magical_damage(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	to_take = take_damage_to_shield(to_take)
+	if to_take <= 0: return
+	hp -= to_take
+
+func take_status_damage(amount: int):
+	if amount <= 0: return
+	var to_take = amount #redundant for now
+	if to_take <= 0: return #redundant for now
+	hp -= to_take
+
+func heal(amount: int): #need to do KO checking
+	if amount <= 0: return
+	var to_take = amount
+	if to_take <= 0: return
+	hp += to_take
+
+func rally(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	if risk_and_guard > 0: #guard
+		var to_boost = to_take
+		while risk_and_guard > 0 or to_boost > 0:
+			to_take += 1
+			risk_and_guard -= 1
+			to_boost -= 1
+	elif risk_and_guard < 0: #risk
+		while risk_and_guard < 0 or to_take > 0:
+			to_take -= 1
+			risk_and_guard += 1
+	if to_take <= 0: return
+	hp += to_take
+
+func take_risk(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	if to_take <= 0: return
+	risk_and_guard -= to_take
+
+func gain_guard(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	if to_take <= 0: return
+	risk_and_guard += to_take
+
+func take_poison(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	if to_take <= 0: return
+	poison += to_take
+
+func take_burn(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	if to_take <= 0: return
+	burn += to_take
+#endregion
+
+#region functions to proc statuses like poison
+func burn_proc(): #call at round end
+	if burn < 0:
+		printerr("DEBUG: Burn on " + display_name + " has gone below zero to: " + str(burn) + ". Correcting.")
+		burn = 0
+		return
+	if burn == 0: return
+	take_status_damage(burn)
+	burn -= 1
+
+func poison_proc(av: int, ct: int): #call at any av/ct gain - ct may be an issue here unsure
+	if poison < 0:
+		printerr("DEBUG: Poison on " + display_name + " has gone below zero to: " + str(burn) + ". Correcting.")
+		poison = 0
+		return
+	if poison == 0: return
+	take_status_damage(av+ct)
+	poison -= 1
+#endregion
 
 #func simulated_take_physical_damage(amount: int, results: SimulationResult):
 	#if amount <= 0:

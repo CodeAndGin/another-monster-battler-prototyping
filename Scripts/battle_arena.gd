@@ -277,13 +277,8 @@ func update_keys_on_monsters():
 
 #region Round and Turn Logic
 func execute_round():
-	print(active_refs["player1monster"].display_name + "'s HP: %s" % active_refs["player1monster"].hp)
-	print(bench_1_refs["bmonster1"].display_name + "'s HP: %s" % bench_1_refs["bmonster1"].hp)
-	print(bench_1_refs["bmonster2"].display_name + "'s HP: %s" % bench_1_refs["bmonster2"].hp)
-	print(active_refs["player2monster"].display_name + "'s HP: %s" % active_refs["player2monster"].hp)
-	print(bench_2_refs["bmonster1"].display_name + "'s HP: %s" % bench_1_refs["bmonster1"].hp)
-	print(bench_2_refs["bmonster2"].display_name + "'s HP: %s" % bench_1_refs["bmonster2"].hp)
 	#round start
+	round_begin.emit()
 	#do player/monster turns
 	#starts calling for player/monster turns
 	#Boolean to catch if no turns occuring, as the await hangs otherwise 
@@ -294,7 +289,9 @@ func execute_round():
 	execute_to_go()
 	if need_to_wait: await to_go_complete
 	#round end
+	round_end.emit() #burn happens here
 	#tick time
+	round_time_tick.emit()
 	game_time += 1 #currently unused but good to have
 	for actor in active_refs:
 		active_refs[actor].action_value -= 1
@@ -339,6 +336,9 @@ func execute_new_turn(actor: String):
 	test_button_ready = true
 	display_event_description(going_actor.display_name + "'s turn")
 	print(going_actor.display_name + "'s turn")
+
+func add_move_to_stack(move: Move):
+	action_stack.append(move)
 
 func resolve_action_stack():
 	#placeholder code for test spells

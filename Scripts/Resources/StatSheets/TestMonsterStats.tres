@@ -1,7 +1,7 @@
 [gd_resource type="Resource" script_class="MonsterStats" load_steps=4 format=3 uid="uid://d1qb3jhb3wgfm"]
 
 [ext_resource type="Script" path="res://Scripts/Resources/StatSheets/Monster_Stat_Sheet.gd" id="1_0kwuy"]
-[ext_resource type="Script" path="res://Scripts/Resources/Moves/action.gd" id="1_hn4lo"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/move.gd" id="1_b6asr"]
 [ext_resource type="Resource" uid="uid://cwxcepeg42umk" path="res://Scripts/Resources/Moves/Mousquire/strike.tres" id="2_g2k17"]
 
 [resource]
@@ -12,4 +12,4 @@ STARTING_HP = 10
 MAX_RV = 10
 STARTING_RV = 10
 overcapping_rv = false
-move_list = Array[ExtResource("1_hn4lo")]([ExtResource("2_g2k17")])
+move_list = Array[ExtResource("1_b6asr")]([ExtResource("2_g2k17")])
