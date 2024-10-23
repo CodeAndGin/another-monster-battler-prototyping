@@ -32,6 +32,8 @@ var exposed: bool = false
 var poison: int
 var burn: int
 
+var direct_order_move: Move
+
 func test_tactics_set():
 	if not tactics_sheet: return
 	if FuncUtils.evaluate(tactics_sheet.setA["First"][0], FuncUtils.get_condition_variable_names(), FuncUtils.get_condition_variable_values(self, arena)):
@@ -88,6 +90,16 @@ func take_magical_damage(amount: int):
 	to_take = take_damage_to_shield(to_take)
 	if to_take <= 0: return
 	hp -= to_take
+
+func simulated_take_magical_damage(amount: int):
+	if amount <= 0: return
+	var to_take = amount
+	to_take = take_damage_to_shield(to_take)
+	if to_take <= 0: return
+	var result = SimulationResult.new()
+	result.mag_damage_taken = to_take
+	result.resulting_hp = hp - to_take
+	return result
 
 func take_status_damage(amount: int):
 	if amount <= 0: return
@@ -161,6 +173,13 @@ func poison_proc(av: int, ct: int): #call at any av/ct gain - ct may be an issue
 	take_status_damage(av+ct)
 	poison -= 1
 #endregion
+
+func before_reaction_call(result: SimulationResult):
+	var keys = ["First reaction", "Second reaction", "Third reaction", "Fourth reaction", "Fifth reaction"]
+	if tactics_sheet:
+		var t_set = tactics_sheet.setA if active_tactics_set_is_A else tactics_sheet.setB
+		for key in keys:
+			pass
 
 #func simulated_take_physical_damage(amount: int, results: SimulationResult):
 	#if amount <= 0:

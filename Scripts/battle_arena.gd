@@ -339,6 +339,7 @@ func execute_new_turn(actor: String):
 
 func add_move_to_stack(move: Move):
 	action_stack.append(move)
+	move.simulated_resolve()
 
 func resolve_action_stack():
 	#placeholder code for test spells

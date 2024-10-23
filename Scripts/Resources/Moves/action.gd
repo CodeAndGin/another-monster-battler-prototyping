@@ -81,19 +81,59 @@ func check_if_can_use_on_target(_user: Actor, _target: Actor) -> bool:
 func add_to_action_stack(arena: Arena, _user: Actor, _target: Monster):
 	arena.add_move_to_stack(self.copy(_user, _target))
 
-#func simulated_resolve():
-	#if not user and target:
-		#printerr("DEBUG: Something has gone horribly wrong. Do not call simulated_resolve() unless user and target are set, ideally only when the move has been copied and is stacked for use")
-		#return
-	#if len(internal_order_of_effects) < 1:
-		#printerr("DEBUG: Please specify order of effects to resolve in the internal_order_of_effects array")
-		#return
-	#for type in internal_order_of_effects:
-		#match type:
-			#EnumUtils.MoveEffectTypes.PHYS_DAMAGE:
+func simulated_resolve():
+	if not user and target:
+		printerr("DEBUG: Something has gone horribly wrong. Do not call resolve() unless user and target are set, ideally only when the move has been copied and is stacked for use")
+		return
+	if len(internal_order_of_effects) < 1:
+		printerr("DEBUG: Please specify order of effects to resolve in the internal_order_of_effects array")
+		return
+	if target is not Monster:
+		printerr("DEBUG: Actions should only target monsters. Current target: " + target.display_name)
+		return
+	var result: SimulationResult
+	for type in internal_order_of_effects:
+		match type:
+			EnumUtils.MoveEffectTypes.PHYS_DAMAGE:
+				pass
 				#target.simulated_take_physical_damage(calculated_phys_damage_amount)
-			#_:
-				#printerr("DEBUG: Chosen type " + EnumUtils.MoveEffectTypes.keys()[type] + " is not recognised")
+			EnumUtils.MoveEffectTypes.MAG_DAMAGE:
+				result = target.simulated_take_magical_damage(calculated_mag_damage_amount)
+			EnumUtils.MoveEffectTypes.STAT_DAMAGE:
+				pass
+				#target.simulated_take_status_damage(calculated_stat_damage_amount)
+			EnumUtils.MoveEffectTypes.HEAL:
+				pass
+				#user.simulated_heal(calculated_heal_amount)
+			EnumUtils.MoveEffectTypes.RALLY:
+				pass
+				#user.simulated_rally(calculated_rally_amount)
+			EnumUtils.MoveEffectTypes.RISK:
+				pass
+				#target.simulated_take_risk(calculated_risk_amount)
+			EnumUtils.MoveEffectTypes.GUARD:
+				pass
+				#user.simulated_gain_guard(calculated_guard_amount)
+			EnumUtils.MoveEffectTypes.SHIELD:
+				pass
+				#user.simulated_gain_shield(calculated_shield_amount)
+			EnumUtils.MoveEffectTypes.POISON:
+				pass
+				#target.simulated_take_poison(calculated_poison_amount)
+			EnumUtils.MoveEffectTypes.BURN:
+				pass
+				#target.simulated_take_burn(calculated_burn_amount)
+			EnumUtils.MoveEffectTypes.BESPOKE:
+				pass
+				#bespoke_effect.bespoke_effect(user, target)
+			_:
+				printerr("DEBUG: Chosen type " + EnumUtils.MoveEffectTypes.keys()[type] + " is not recognised")
+	if result:
+		result.user = user
+		result.target = target
+		result.move = self
+		user.before_reaction_call(result)
+		target.before_reaction_call(result)
 
 func resolve():
 	if not user and target:
