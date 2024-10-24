@@ -28,6 +28,22 @@ class_name Arena
 #endregion
 
 #region Changeable Node Reference Dictionaries
+#TODO: This stuff is probably going to need a rework for dynamic loading
+@onready var team_one = \
+[
+	player_point_1.get_children()[0] if len(player_point_1.get_children()) > 0 else null,
+	monster_point_player_1.get_children()[0] if len(monster_point_player_1.get_children()) > 0 else null,
+	player_1_bench.get_children()[0] if len(player_1_bench.get_children()) > 0 else null,
+	player_1_bench.get_children()[1] if len(player_1_bench.get_children()) > 1 else null
+]
+@onready var team_two  = \
+[
+	player_point_2.get_children()[0] if len(player_point_2.get_children()) > 0 else null,
+	monster_point_player_2.get_children()[0] if len(monster_point_player_2.get_children()) > 0 else null,
+	player_2_bench.get_children()[0] if len(player_2_bench.get_children()) > 0 else null,
+	player_2_bench.get_children()[1] if len(player_2_bench.get_children()) > 1 else null
+]
+
 @onready var active_refs = \
 	{
 		"player1": null,
@@ -45,6 +61,7 @@ class_name Arena
 		set(value):
 			pass
 
+#TODO: This feels like a silly idea. Consider changing this.
 @onready var move_container_refs = \
 	{
 		"player1spell": $arena/PlayerMovePoint1,
@@ -133,7 +150,8 @@ func _ready() -> void:
 	#execute_turn()
 	connect_move_containers()
 	event_display_timer.wait_time = tick_time_length
-	update_keys_on_monsters()
+	update_keys_on_monsters() #Could be depricated?
+	set_point_references_on_actors()
 
 func test():
 	print("tested")
@@ -272,6 +290,26 @@ func update_keys_on_monsters():
 		bench_1_refs[key].own_key = key
 	for key in bench_2_refs:
 		bench_2_refs[key].own_key = key
+
+func set_point_references_on_actors():
+	for actor in team_one:
+		if actor is Actor:
+			actor.team = 1
+			actor.ally_point = monster_point_player_1
+			actor.bench_point = player_1_bench
+			actor.rival_point = monster_point_player_2
+			actor.rival_bench_point = player_2_bench
+			actor.own_player_point = player_point_1
+			actor.rival_player_point = player_point_2
+	for actor in team_two:
+		if actor is Actor:
+			actor.team = 2
+			actor.ally_point = monster_point_player_2
+			actor.bench_point = player_2_bench
+			actor.rival_point = monster_point_player_1
+			actor.rival_bench_point = player_1_bench
+			actor.own_player_point = player_point_2
+			actor.rival_player_point = player_point_1
 
 #endregion
 

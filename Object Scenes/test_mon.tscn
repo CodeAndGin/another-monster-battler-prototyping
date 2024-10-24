@@ -1,76 +1,42 @@
-[gd_scene load_steps=9 format=3 uid="uid://mupqcdfime6k"]
+[gd_scene load_steps=6 format=3 uid="uid://mupqcdfime6k"]
 
 [ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="1_dioyj"]
 [ext_resource type="Script" path="res://Scripts/generic_mon.gd" id="1_whqcd"]
 [ext_resource type="Resource" uid="uid://d1qb3jhb3wgfm" path="res://Scripts/Resources/StatSheets/TestMonsterStats.tres" id="2_o3thi"]
 [ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set_template.gd" id="3_i8gsi"]
-[ext_resource type="Resource" uid="uid://c4extr6t0e2hy" path="res://Scripts/Resources/Moves/testing/Bespoke effect resources/BespokeTestA.tres" id="4_i1p64"]
-[ext_resource type="Script" path="res://Scripts/Resources/Moves/action.gd" id="5_lccxe"]
 
-[sub_resource type="Resource" id="Resource_7w7to"]
-script = ExtResource("5_lccxe")
-move_type = 0
-is_melee = false
-is_instant = false
-move_name = "testa"
-bespoke_effect = ExtResource("4_i1p64")
-internal_order_of_effects = Array[int]([])
-_min_phys_damage = 0
-_max_phys_damage = 0
-_min_mag_damage = 0
-_max_mag_damage = 0
-_min_stat_damage = 0
-_max_stat_damage = 0
-_min_heal = 0
-_max_heal = 0
-_min_rally = 0
-_max_rally = 0
-_min_risk = 0
-_max_risk = 0
-_min_guard = 0
-_max_guard = 0
-_min_shield = 0
-_max_shield = 0
-_min_poison = 0
-_max_poison = 0
-_min_burn = 0
-_max_burn = 0
-av_cost = 0
-rv_cost = 0
-ct_cost = 0
-
-[sub_resource type="Resource" id="Resource_l076m"]
+[sub_resource type="Resource" id="Resource_dfgca"]
 script = ExtResource("3_i8gsi")
 default_set_is_A = true
 setA = {
-"Fifth": [null, null],
-"Fifth reaction": [null, null],
-"First": ["HP > 0", SubResource("Resource_7w7to")],
-"First reaction": [null, null],
-"Fourth": [null, null],
-"Fourth reaction": [null, null],
-"Second": [null, null],
-"Second reaction": [null, null],
-"Third": [null, null],
-"Third reaction": [null, null]
+"Fifth": null,
+"Fifth reaction": null,
+"First": null,
+"First reaction": null,
+"Fourth": null,
+"Fourth reaction": null,
+"Second": null,
+"Second reaction": null,
+"Third": null,
+"Third reaction": null
 }
 setB = {
-"Fifth": [null, null],
-"Fifth reaction": [null, null],
-"First": [null, null],
-"First reaction": [null, null],
-"Fourth": [null, null],
-"Fourth reaction": [null, null],
-"Second": [null, null],
-"Second reaction": [null, null],
-"Third": [null, null],
-"Third reaction": [null, null]
+"Fifth": null,
+"Fifth reaction": null,
+"First": null,
+"First reaction": null,
+"Fourth": null,
+"Fourth reaction": null,
+"Second": null,
+"Second reaction": null,
+"Third": null,
+"Third reaction": null
 }
 
 [node name="TestMon" type="Node3D"]
 script = ExtResource("1_whqcd")
 stat_sheet = ExtResource("2_o3thi")
-tactics_sheet = SubResource("Resource_l076m")
+tactics_sheet = SubResource("Resource_dfgca")
 
 [node name="FrontFace" type="Sprite3D" parent="."]
 centered = false

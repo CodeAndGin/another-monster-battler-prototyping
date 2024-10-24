@@ -36,10 +36,10 @@ var direct_order_move: Move
 
 func test_tactics_set():
 	if not tactics_sheet: return
-	if FuncUtils.evaluate(tactics_sheet.setA["First"][0], FuncUtils.get_condition_variable_names(), FuncUtils.get_condition_variable_values(self, arena)):
-		tactics_sheet.setA["First"][1].bespoke_effect.bespoke_effect()
-	else:
-		print("condition not met")
+	#if FuncUtils.evaluate(tactics_sheet.setA["First"][0], FuncUtils.get_condition_variable_names(), FuncUtils.get_condition_variable_values(self, arena)):
+		#tactics_sheet.setA["First"][1].bespoke_effect.bespoke_effect()
+	#else:
+		#print("condition not met")
 
 func _ready() -> void:
 	super() #calls parent class' _ready()

@@ -3,7 +3,6 @@ extends Move
 class_name Action
 
 @export var move_type: EnumUtils.ActionTypes
-
 @export var is_melee: bool
 @export var is_instant: bool
 ##Only to be used when copied for placing on the stack

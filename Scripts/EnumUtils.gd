@@ -43,9 +43,22 @@ enum Ranges \
 enum TargetTypes \
 {
 	SELF,
-	OPPONENT,
+	RIVAL,
 	ALLY
 }
+
+enum PlayerIdents \
+{
+	PLAYER,
+	RIVAL_PLAYER
+}
+
+#enum TargetTypesComp \
+#{
+	#SELF,
+	#ALLY,
+	#ALLY_AND_SELF
+#}
 
 enum ActorTypes \
 {

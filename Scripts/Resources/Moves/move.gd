@@ -2,6 +2,7 @@ extends Resource
 class_name Move
 
 @export var move_name: String
+@export var targets: TargetStructure
 
 @export var bespoke_effect: BespokeEffectBase
 
