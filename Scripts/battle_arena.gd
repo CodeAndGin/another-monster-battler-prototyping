@@ -152,6 +152,7 @@ func _ready() -> void:
 	event_display_timer.wait_time = tick_time_length
 	update_keys_on_monsters() #Could be depricated?
 	set_point_references_on_actors()
+	connect_signals()
 
 func test():
 	print("tested")
@@ -291,6 +292,15 @@ func update_keys_on_monsters():
 	for key in bench_2_refs:
 		bench_2_refs[key].own_key = key
 
+func connect_signals():
+	for key in active_refs:
+		if key.contains("monster"):
+			turn_begin.connect(active_refs[key].test_tactics_set)
+	for key in bench_1_refs:
+		turn_begin.connect(bench_1_refs[key].test_tactics_set)
+	for key in bench_2_refs:
+		turn_begin.connect(bench_2_refs[key].test_tactics_set)
+
 func set_point_references_on_actors():
 	for actor in team_one:
 		if actor is Actor:
@@ -370,10 +380,20 @@ func execute_to_go():
 func execute_new_turn(actor: String):
 	going_actor_key = actor
 	going_actor = active_refs[going_actor_key]
-	turn_begin.emit(going_actor)
 	test_button_ready = true
 	display_event_description(going_actor.display_name + "'s turn")
-	print(going_actor.display_name + "'s turn")
+	await get_tree().create_timer(tick_time_length).timeout
+	turn_begin.emit(going_actor)
+	if going_actor is Monster:
+		var was_instant = await going_actor.tactic_excecuted
+		resolve_action_stack()
+		if not was_instant: regenerate_conflict_resolution(going_actor_key)
+		else: to_go.insert(0, going_actor_key)
+		test_button_ready = false
+		going_actor = null
+		going_actor_key = null
+		calculate_turn_order()
+		turn_complete.emit()
 
 func add_move_to_stack(move: Move):
 	action_stack.append(move)

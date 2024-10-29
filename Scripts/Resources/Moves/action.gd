@@ -2,7 +2,7 @@
 extends Move
 class_name Action
 
-@export var move_type: EnumUtils.ActionTypes
+@export var move_type: GlobalUtils.ActionTypes
 @export var is_melee: bool
 @export var is_instant: bool
 ##Only to be used when copied for placing on the stack
@@ -75,7 +75,7 @@ func copy(_user: Actor, _target: Monster) -> Action:
 
 func check_if_can_use_on_target(_user: Actor, _target: Actor) -> bool:
 	if _target is not Monster: return false
-	return bespoke_target_check.bespoke_target_check(_user, _target)
+	return bespoke_target_check.bespoke_target_check(_user, _target) if bespoke_target_check else true
 
 func add_to_action_stack(arena: Arena, _user: Actor, _target: Monster):
 	arena.add_move_to_stack(self.copy(_user, _target))
@@ -93,40 +93,40 @@ func simulated_resolve():
 	var result: SimulationResult
 	for type in internal_order_of_effects:
 		match type:
-			EnumUtils.MoveEffectTypes.PHYS_DAMAGE:
+			GlobalUtils.MoveEffectTypes.PHYS_DAMAGE:
 				pass
 				#target.simulated_take_physical_damage(calculated_phys_damage_amount)
-			EnumUtils.MoveEffectTypes.MAG_DAMAGE:
+			GlobalUtils.MoveEffectTypes.MAG_DAMAGE:
 				result = target.simulated_take_magical_damage(calculated_mag_damage_amount)
-			EnumUtils.MoveEffectTypes.STAT_DAMAGE:
+			GlobalUtils.MoveEffectTypes.STAT_DAMAGE:
 				pass
 				#target.simulated_take_status_damage(calculated_stat_damage_amount)
-			EnumUtils.MoveEffectTypes.HEAL:
+			GlobalUtils.MoveEffectTypes.HEAL:
 				pass
 				#user.simulated_heal(calculated_heal_amount)
-			EnumUtils.MoveEffectTypes.RALLY:
+			GlobalUtils.MoveEffectTypes.RALLY:
 				pass
 				#user.simulated_rally(calculated_rally_amount)
-			EnumUtils.MoveEffectTypes.RISK:
+			GlobalUtils.MoveEffectTypes.RISK:
 				pass
 				#target.simulated_take_risk(calculated_risk_amount)
-			EnumUtils.MoveEffectTypes.GUARD:
+			GlobalUtils.MoveEffectTypes.GUARD:
 				pass
 				#user.simulated_gain_guard(calculated_guard_amount)
-			EnumUtils.MoveEffectTypes.SHIELD:
+			GlobalUtils.MoveEffectTypes.SHIELD:
 				pass
 				#user.simulated_gain_shield(calculated_shield_amount)
-			EnumUtils.MoveEffectTypes.POISON:
+			GlobalUtils.MoveEffectTypes.POISON:
 				pass
 				#target.simulated_take_poison(calculated_poison_amount)
-			EnumUtils.MoveEffectTypes.BURN:
+			GlobalUtils.MoveEffectTypes.BURN:
 				pass
 				#target.simulated_take_burn(calculated_burn_amount)
-			EnumUtils.MoveEffectTypes.BESPOKE:
+			GlobalUtils.MoveEffectTypes.BESPOKE:
 				pass
 				#bespoke_effect.bespoke_effect(user, target)
 			_:
-				printerr("DEBUG: Chosen type " + EnumUtils.MoveEffectTypes.keys()[type] + " is not recognised")
+				printerr("DEBUG: Chosen type " + GlobalUtils.MoveEffectTypes.keys()[type] + " is not recognised")
 	if result:
 		result.user = user
 		result.target = target
@@ -145,32 +145,33 @@ func resolve():
 		printerr("DEBUG: Actions should only target monsters. Current target: " + target.display_name)
 		return
 	user.action_value += av_cost
+	user.rv += rv_cost
 	for type in internal_order_of_effects:
 		match type:
-			EnumUtils.MoveEffectTypes.PHYS_DAMAGE:
+			GlobalUtils.MoveEffectTypes.PHYS_DAMAGE:
 				target.take_physical_damage(calculated_phys_damage_amount)
-			EnumUtils.MoveEffectTypes.MAG_DAMAGE:
+			GlobalUtils.MoveEffectTypes.MAG_DAMAGE:
 				target.take_magical_damage(calculated_mag_damage_amount)
-			EnumUtils.MoveEffectTypes.STAT_DAMAGE:
+			GlobalUtils.MoveEffectTypes.STAT_DAMAGE:
 				target.take_status_damage(calculated_stat_damage_amount)
-			EnumUtils.MoveEffectTypes.HEAL:
+			GlobalUtils.MoveEffectTypes.HEAL:
 				user.heal(calculated_heal_amount)
-			EnumUtils.MoveEffectTypes.RALLY:
+			GlobalUtils.MoveEffectTypes.RALLY:
 				user.rally(calculated_rally_amount)
-			EnumUtils.MoveEffectTypes.RISK:
+			GlobalUtils.MoveEffectTypes.RISK:
 				target.take_risk(calculated_risk_amount)
-			EnumUtils.MoveEffectTypes.GUARD:
+			GlobalUtils.MoveEffectTypes.GUARD:
 				user.gain_guard(calculated_guard_amount)
-			EnumUtils.MoveEffectTypes.SHIELD:
+			GlobalUtils.MoveEffectTypes.SHIELD:
 				user.gain_shield(calculated_shield_amount)
-			EnumUtils.MoveEffectTypes.POISON:
+			GlobalUtils.MoveEffectTypes.POISON:
 				target.take_poison(calculated_poison_amount)
-			EnumUtils.MoveEffectTypes.BURN:
+			GlobalUtils.MoveEffectTypes.BURN:
 				target.take_burn(calculated_burn_amount)
-			EnumUtils.MoveEffectTypes.BESPOKE:
+			GlobalUtils.MoveEffectTypes.BESPOKE:
 				bespoke_effect.bespoke_effect(user, target)
 			_:
-				printerr("DEBUG: Chosen type " + EnumUtils.MoveEffectTypes.keys()[type] + " is not recognised")
+				printerr("DEBUG: Chosen type " + GlobalUtils.MoveEffectTypes.keys()[type] + " is not recognised")
 	
 
 func create_spell():

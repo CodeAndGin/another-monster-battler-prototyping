@@ -1,5 +1,5 @@
 extends Resource
-class_name TacticsSetTemplate
+class_name TacticsSet
 
 @export var default_set_is_A = true
 

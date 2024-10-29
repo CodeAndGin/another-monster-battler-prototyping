@@ -5,5 +5,5 @@ class_name TacticsCondition
 func is_condition_met(user: Actor = null, target: Actor = null, move_target: Move = null) -> bool:
 	return false
 
-func check(potential_targets: Array[Actor]) -> Array[Actor]:
+func check(user: Actor = null, potential_targets: Array[Actor] = [], move_target: Move = null) -> Array[Actor]:
 	return potential_targets

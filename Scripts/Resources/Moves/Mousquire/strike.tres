@@ -8,7 +8,6 @@ script = ExtResource("2_afbi4")
 benched = Array[int]([])
 active = Array[int]([1])
 players = Array[int]([])
-_self = false
 
 [resource]
 script = ExtResource("1_q1sr5")

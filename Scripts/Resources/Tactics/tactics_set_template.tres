@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="TacticsSetTemplate" load_steps=4 format=3 uid="uid://dtwye1wpll325"]
 
-[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set_template.gd" id="1_balt5"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set.gd" id="1_balt5"]
 [ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="2_ajw7p"]
 
 [sub_resource type="Resource" id="Resource_rvgkb"]

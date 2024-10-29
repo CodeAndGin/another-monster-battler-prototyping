@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://dafxi6djap6hu"]
+[gd_scene load_steps=25 format=3 uid="uid://dafxi6djap6hu"]
 
 [ext_resource type="Script" path="res://Scripts/battle_arena.gd" id="1_rw6c8"]
 [ext_resource type="PackedScene" uid="uid://b7mxqokcravnv" path="res://Gameplay Scenes/arena.tscn" id="1_ygb6g"]
@@ -9,9 +9,12 @@
 [ext_resource type="PackedScene" uid="uid://mupqcdfime6k" path="res://Object Scenes/test_mon.tscn" id="4_s2ued"]
 [ext_resource type="Script" path="res://Scripts/battle_hud.gd" id="5_851yb"]
 [ext_resource type="PackedScene" uid="uid://c5114u4538jg4" path="res://UI Scenes/player_buttons.tscn" id="6_uxm72"]
-[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set_template.gd" id="7_507k4"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set.gd" id="7_507k4"]
 [ext_resource type="PackedScene" uid="uid://dphxdtiqku0tt" path="res://UI Scenes/direct_order_menu.tscn" id="7_mejuj"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/self_HP_value_compare.gd" id="8_3i3pi"]
 [ext_resource type="PackedScene" uid="uid://dij256j18u2pw" path="res://UI Scenes/switch_mon_menu.tscn" id="8_756s2"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="9_dcj35"]
+[ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="9_do8yt"]
 [ext_resource type="PackedScene" uid="uid://4ogvq3skswfl" path="res://UI Scenes/mon_health_bar.tscn" id="12_dmapu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcgp1"]
@@ -27,17 +30,39 @@ sky = SubResource("Sky_e8bxa")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="Resource" id="Resource_xrmba"]
+[sub_resource type="Resource" id="Resource_y18sm"]
+script = ExtResource("8_3i3pi")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_63nq8"]
+script = ExtResource("9_dcj35")
+condition = SubResource("Resource_y18sm")
+priority = 0
+move = ExtResource("9_do8yt")
+
+[sub_resource type="Resource" id="Resource_jtbml"]
+script = ExtResource("8_3i3pi")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_6s241"]
+script = ExtResource("9_dcj35")
+condition = SubResource("Resource_jtbml")
+priority = 0
+move = ExtResource("3_3whsq")
+
+[sub_resource type="Resource" id="Resource_y7iva"]
 script = ExtResource("7_507k4")
 default_set_is_A = true
 setA = {
 "Fifth": null,
 "Fifth reaction": null,
-"First": null,
+"First": SubResource("Resource_63nq8"),
 "First reaction": null,
 "Fourth": null,
 "Fourth reaction": null,
-"Second": null,
+"Second": SubResource("Resource_6s241"),
 "Second reaction": null,
 "Third": null,
 "Third reaction": null
@@ -57,7 +82,7 @@ setB = {
 
 [node name="BattleArena" type="Node3D"]
 script = ExtResource("1_rw6c8")
-tick_time_length = 0.22
+tick_time_length = 0.5
 generic_spell = ExtResource("2_8bg6a")
 test_move = ExtResource("3_3whsq")
 
@@ -93,7 +118,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.0599527, 0)
 
 [node name="TestMon" parent="arena/MonsterPoint1" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-tactics_sheet = SubResource("Resource_xrmba")
+tactics_sheet = SubResource("Resource_y7iva")
 display_name = "Mon A One"
 
 [node name="MovePoint1" type="Node3D" parent="arena"]

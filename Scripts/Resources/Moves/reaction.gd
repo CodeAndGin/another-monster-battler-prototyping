@@ -1,7 +1,7 @@
 extends Move
 class_name Reaction
 
-@export var bespoke_internal_reaction_trigger_condition: BespokeInternalReactionTriggerConditionBase
+@export var bespoke_internal_reaction_trigger_condition: BespokeInternalReactionTriggerCondition
 
 var trigger: SimulationResult
 

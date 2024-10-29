@@ -2,7 +2,7 @@ extends Actor
 class_name Monster
 
 @export var stat_sheet: MonsterStats
-@export var tactics_sheet: TacticsSetTemplate
+@export var tactics_sheet: TacticsSet
 var active_tactics_set_is_A = true
 
 var own_key = ""
@@ -34,12 +34,48 @@ var burn: int
 
 var direct_order_move: Move
 
-func test_tactics_set():
+
+signal tactic_excecuted(was_instant: bool)
+
+
+func test_tactics_set(user):
+	if not user == self: return
 	if not tactics_sheet: return
-	#if FuncUtils.evaluate(tactics_sheet.setA["First"][0], FuncUtils.get_condition_variable_names(), FuncUtils.get_condition_variable_values(self, arena)):
-		#tactics_sheet.setA["First"][1].bespoke_effect.bespoke_effect()
-	#else:
-		#print("condition not met")
+	await get_tree().create_timer(arena.tick_time_length).timeout
+	var keys = ["First", "Second", "Third", "Fourth", "Fifth"]
+	var active_set = tactics_sheet.setA if active_tactics_set_is_A else tactics_sheet.setB
+	var was_instant = false
+	var went = false
+	for key in keys:
+		if not active_set[key]: continue
+		var tactic: Tactic = active_set[key]
+		var potential_targets = get_actor_targets(tactic.move.targets)
+		var condition: TacticsCondition = tactic.condition
+		potential_targets = condition.check(self, potential_targets)
+		if potential_targets == []: continue
+		var target = choose_target_by_priority(potential_targets, tactic.priority)
+		var checks = tactic.move.check_if_can_use_cost(self) and tactic.move.check_if_can_use_on_target(self, target)
+		var move: Action = tactic.move if tactic.move is Action else null
+		if not move:
+			printerr("Move was not an Action, this section of the tactics only expects actions")
+			continue
+		if not checks: continue
+		move.add_to_action_stack(arena, self, target)
+		arena.display_event_description(display_name + " used " + move.move_name + (" (Instant)" if move.is_instant else ""))
+		was_instant = move.is_instant
+		went = true
+		#TODO: Handle instants somehow
+		break
+	if not went: av += 2
+	tactic_excecuted.emit(was_instant)
+
+func choose_target_by_priority(potential_targets: Array[Actor], priority: GlobalUtils.TargetPriorities) -> Actor:
+	if len(potential_targets) == 1: return potential_targets.pop_front()
+	var target = potential_targets[0]
+	for actor in potential_targets:
+		if target == actor: continue
+		target = GlobalUtils.compare_actors_by_priority(target, actor, priority)
+	return target
 
 func _ready() -> void:
 	super() #calls parent class' _ready()

@@ -1,5 +1,5 @@
 extends Resource
-class_name BespokeInternalReactionTriggerConditionBase
+class_name BespokeInternalReactionTriggerCondition
 
 func condition(result: SimulationResult) -> bool:
 	return true

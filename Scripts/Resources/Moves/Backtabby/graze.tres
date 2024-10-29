@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="Action" load_steps=4 format=3 uid="uid://hhiu80e5joq8"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/action.gd" id="1_l2yt1"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/target_structure.gd" id="2_vpy4k"]
+
+[sub_resource type="Resource" id="Resource_dt1hj"]
+script = ExtResource("2_vpy4k")
+benched = Array[int]([])
+active = Array[int]([1])
+players = Array[int]([])
+
+[resource]
+script = ExtResource("1_l2yt1")
+move_type = 0
+is_melee = true
+is_instant = true
+move_name = "Graze"
+targets = SubResource("Resource_dt1hj")
+internal_order_of_effects = Array[int]([0])
+_min_phys_damage = 1
+_max_phys_damage = 1
+_min_mag_damage = 0
+_max_mag_damage = 0
+_min_stat_damage = 0
+_max_stat_damage = 0
+_min_heal = 0
+_max_heal = 0
+_min_rally = 0
+_max_rally = 0
+_min_risk = 0
+_max_risk = 0
+_min_guard = 0
+_max_guard = 0
+_min_shield = 0
+_max_shield = 0
+_min_poison = 0
+_max_poison = 0
+_min_burn = 0
+_max_burn = 0
+av_cost = 0
+rv_cost = -2
+ct_cost = 0

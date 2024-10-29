@@ -4,21 +4,21 @@ class_name Move
 @export var move_name: String
 @export var targets: TargetStructure
 
-@export var bespoke_effect: BespokeEffectBase
+@export var bespoke_effect: BespokeEffect
 
 ##For checking costs other than RV
-@export var bespoke_cost: BespokeCostBase
+@export var bespoke_cost: BespokeCost
 ##For checking target conditions, such as in Half-Inch, for instance
-@export var bespoke_target_check: BespokeTargetCheckBase
+@export var bespoke_target_check: BespokeTargetCheck
 ##For checking if buffs or fields are up, for instance
-@export var bespoke_internal_condition: BespokeInternalConditionBase
+@export var bespoke_internal_condition: BespokeInternalCondition
 
 var user: Actor
 var target: Actor
 
 #@export var path_to_scene: String
 
-@export var internal_order_of_effects: Array[EnumUtils.MoveEffectTypes]
+@export var internal_order_of_effects: Array[GlobalUtils.MoveEffectTypes]
 
 #region Damage
 @export_group("Damage")
@@ -163,7 +163,7 @@ var calculated_burn_amount: int
 #endregion
 
 func check_if_can_use_cost(_user: Actor) -> bool:
-	var rv_check = _user.reaction_value + rv_cost >= 0
+	var rv_check = _user.rv + rv_cost >= 0
 	var bcc = bespoke_cost.bespoke_cost_check(_user) if bespoke_cost else true
 	var bic = bespoke_internal_condition.bespoke_internal_condition(_user) if bespoke_internal_condition else true
 	return rv_check and bcc and bic

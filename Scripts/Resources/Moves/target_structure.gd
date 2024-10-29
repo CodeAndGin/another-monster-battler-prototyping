@@ -1,6 +1,6 @@
 extends Resource
 class_name TargetStructure
 
-@export var benched: Array[EnumUtils.TargetTypes]
-@export var active: Array[EnumUtils.TargetTypes]
-@export var players: Array[EnumUtils.PlayerIdents]
+@export var benched: Array[GlobalUtils.TargetTypes]
+@export var active: Array[GlobalUtils.TargetTypes]
+@export var players: Array[GlobalUtils.PlayerIdents]

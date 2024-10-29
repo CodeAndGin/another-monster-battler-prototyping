@@ -1,5 +1,5 @@
 extends Resource
-class_name BespokeCostBase
+class_name BespokeCost
 
 func bespoke_cost_check(user: Actor) -> bool:
 	return true

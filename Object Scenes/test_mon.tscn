@@ -1,9 +1,35 @@
-[gd_scene load_steps=6 format=3 uid="uid://mupqcdfime6k"]
+[gd_scene load_steps=14 format=3 uid="uid://mupqcdfime6k"]
 
 [ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="1_dioyj"]
-[ext_resource type="Script" path="res://Scripts/generic_mon.gd" id="1_whqcd"]
+[ext_resource type="Script" path="res://Scripts/monster.gd" id="1_whqcd"]
 [ext_resource type="Resource" uid="uid://d1qb3jhb3wgfm" path="res://Scripts/Resources/StatSheets/TestMonsterStats.tres" id="2_o3thi"]
-[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set_template.gd" id="3_i8gsi"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set.gd" id="3_i8gsi"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/self_HP_value_compare.gd" id="4_xtbv3"]
+[ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="5_wpoy4"]
+[ext_resource type="Resource" uid="uid://cwxcepeg42umk" path="res://Scripts/Resources/Moves/Mousquire/strike.tres" id="5_xiai4"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="6_0vc1o"]
+
+[sub_resource type="Resource" id="Resource_y18sm"]
+script = ExtResource("4_xtbv3")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_63nq8"]
+script = ExtResource("6_0vc1o")
+condition = SubResource("Resource_y18sm")
+priority = 0
+move = ExtResource("5_wpoy4")
+
+[sub_resource type="Resource" id="Resource_jtbml"]
+script = ExtResource("4_xtbv3")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_6s241"]
+script = ExtResource("6_0vc1o")
+condition = SubResource("Resource_jtbml")
+priority = 0
+move = ExtResource("5_xiai4")
 
 [sub_resource type="Resource" id="Resource_dfgca"]
 script = ExtResource("3_i8gsi")
@@ -11,11 +37,11 @@ default_set_is_A = true
 setA = {
 "Fifth": null,
 "Fifth reaction": null,
-"First": null,
+"First": SubResource("Resource_63nq8"),
 "First reaction": null,
 "Fourth": null,
 "Fourth reaction": null,
-"Second": null,
+"Second": SubResource("Resource_6s241"),
 "Second reaction": null,
 "Third": null,
 "Third reaction": null

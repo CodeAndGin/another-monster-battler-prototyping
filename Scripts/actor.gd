@@ -2,7 +2,7 @@ extends Node3D
 class_name Actor
 
 @export var arena: Arena
-@export var type: EnumUtils.ActorTypes
+@export var type: GlobalUtils.ActorTypes
 @export var default_name: String
 @export var display_name: String
 
@@ -70,17 +70,17 @@ func get_actor_targets(target_types: TargetStructure) -> Array[Actor]:
 	
 	for type in target_types.active:
 		match type:
-			EnumUtils.TargetTypes.SELF:
+			GlobalUtils.TargetTypes.SELF:
 				var allies = ally_point.get_children()
 				if allies.has(self):
 					potential_targets.append(self)
-			EnumUtils.TargetTypes.ALLY:
+			GlobalUtils.TargetTypes.ALLY:
 				var allies = ally_point.get_children()
 				if allies.has(self):
 					allies.erase(self)
 				for ally in allies:
 					potential_targets.append(ally)
-			EnumUtils.TargetTypes.RIVAL:
+			GlobalUtils.TargetTypes.RIVAL:
 				for rival in rival_point.get_children():
 					potential_targets.append(rival)
 			_:
@@ -88,17 +88,17 @@ func get_actor_targets(target_types: TargetStructure) -> Array[Actor]:
 	
 	for type in target_types.benched:
 		match type:
-			EnumUtils.TargetTypes.SELF:
+			GlobalUtils.TargetTypes.SELF:
 				var allies = bench_point.get_children()
 				if allies.has(self):
 					potential_targets.append(self)
-			EnumUtils.TargetTypes.ALLY:
+			GlobalUtils.TargetTypes.ALLY:
 				var allies = bench_point.get_children()
 				if allies.has(self):
 					allies.erase(self)
 				for ally in allies:
 					potential_targets.append(ally)
-			EnumUtils.TargetTypes.RIVAL:
+			GlobalUtils.TargetTypes.RIVAL:
 				for rival in rival_bench_point.get_children():
 					potential_targets.append(rival)
 			_:
@@ -107,11 +107,11 @@ func get_actor_targets(target_types: TargetStructure) -> Array[Actor]:
 	#### This one feels dubious ####
 	for type in target_types.players:
 		match type:
-			EnumUtils.PlayerIdents.PLAYER:
+			GlobalUtils.PlayerIdents.PLAYER:
 				var friendly_players = own_player_point.get_children()
 				for player in friendly_players:
 					potential_targets.append(player)
-			EnumUtils.PlayerIdents.RIVAL_PLAYER:
+			GlobalUtils.PlayerIdents.RIVAL_PLAYER:
 				var rival_players = rival_player_point.get_children()
 				for player in rival_players:
 					potential_targets.append(player)
