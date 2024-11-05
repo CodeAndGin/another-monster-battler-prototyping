@@ -28,71 +28,24 @@ class_name Arena
 #endregion
 
 #region Changeable Node Reference Dictionaries
-#TODO: This stuff is probably going to need a rework for dynamic loading
-@onready var team_one = \
-[
-	player_point_1.get_children()[0] if len(player_point_1.get_children()) > 0 else null,
-	monster_point_player_1.get_children()[0] if len(monster_point_player_1.get_children()) > 0 else null,
-	player_1_bench.get_children()[0] if len(player_1_bench.get_children()) > 0 else null,
-	player_1_bench.get_children()[1] if len(player_1_bench.get_children()) > 1 else null
-]
-@onready var team_two  = \
-[
-	player_point_2.get_children()[0] if len(player_point_2.get_children()) > 0 else null,
-	monster_point_player_2.get_children()[0] if len(monster_point_player_2.get_children()) > 0 else null,
-	player_2_bench.get_children()[0] if len(player_2_bench.get_children()) > 0 else null,
-	player_2_bench.get_children()[1] if len(player_2_bench.get_children()) > 1 else null
-]
-
-@onready var active_refs = \
-	{
-		"player1": null,
-		"player2": null,
-		"player1monster": null,
-		"player2monster": null
-	}:
-		get:
-			#regenerate active references in getter
-			active_refs["player1"] = player_point_1.get_children()[0] if len(player_point_1.get_children()) > 0 else null
-			active_refs["player2"] = player_point_2.get_children()[0] if len(player_point_2.get_children()) > 0 else null
-			active_refs["player1monster"] = monster_point_player_1.get_children()[0] if len(monster_point_player_1.get_children()) > 0 else null
-			active_refs["player2monster"] = monster_point_player_2.get_children()[0] if len(monster_point_player_2.get_children()) > 0 else null
-			return active_refs
-		set(value):
-			pass
-
-#TODO: This feels like a silly idea. Consider changing this.
-@onready var move_container_refs = \
-	{
-		"player1spell": $arena/PlayerMovePoint1,
-		"player2spell": $arena/PlayerMovePoint2,
-		"player1monsterspell": $arena/MovePoint1,
-		"player2monsterspell": $arena/MovePoint2
-	}
-
-@onready var bench_1_refs = \
-	{
-		"bmonster1": null, 
-		"bmonster2": null
-	}:
-		get:
-			bench_1_refs["bmonster1"] = player_1_bench.get_children()[0] if len(player_1_bench.get_children()) > 0 else null
-			bench_1_refs["bmonster2"] = player_1_bench.get_children()[1] if len(player_1_bench.get_children()) > 1 else null
-			return bench_1_refs
-		set(value):
-			pass
-
-@onready var bench_2_refs = \
-	{
-		"bmonster1": null, 
-		"bmonster2": null
-	}:
-		get:
-			bench_2_refs["bmonster1"] = player_2_bench.get_children()[0] if len(player_2_bench.get_children()) > 0 else null
-			bench_2_refs["bmonster2"] = player_2_bench.get_children()[1] if len(player_2_bench.get_children()) > 1 else null
-			return bench_2_refs
-		set(value):
-			pass
+@onready var team_zero: Dictionary:
+	get:
+		return \
+		{
+			"players": player_point_1.get_children() if len(player_point_1.get_children()) > 0 else [],
+			"actives": monster_point_player_1.get_children() if len(monster_point_player_1.get_children()) > 0 else [],
+			"benched": player_1_bench.get_children() if len(player_1_bench.get_children()) > 0 else []
+		}
+@onready var team_one: Dictionary:
+	get:
+		return \
+		{
+			"players": player_point_2.get_children() if len(player_point_2.get_children()) > 0 else [],
+			"actives": monster_point_player_2.get_children() if len(monster_point_player_2.get_children()) > 0 else [],
+			"benched": player_2_bench.get_children() if len(player_2_bench.get_children()) > 0 else []
+		}
+@onready var teams: 
+	get: return [team_zero, team_one]
 #endregion
 
 #region Signals
@@ -123,7 +76,7 @@ var game_time = 0
 @export var tick_time_length = 0.25 ##Amount of time the game waits between rounds, spells added to stack, etc.
 
 var going_actor: Actor
-var going_actor_key
+#var going_actor_key
 var to_go: Array
 
 var action_stack: Array
@@ -148,9 +101,9 @@ func _ready() -> void:
 	generate_initial_order_random()
 	turn_order_calculated.emit(calculate_turn_order())
 	#execute_turn()
-	connect_move_containers()
+	#connect_move_containers()
 	event_display_timer.wait_time = tick_time_length
-	update_keys_on_monsters() #Could be depricated?
+	#update_keys_on_monsters() #Could be depricated?
 	set_point_references_on_actors()
 	connect_signals()
 
@@ -169,17 +122,13 @@ var test_button_ready = false
 func _on_av_test_pressed() -> void:
 	if test_button_ready:
 		if av_input.text == "" or av_input.text == "0":
-			display_event_description(active_refs[going_actor_key].display_name + " used an instant move; they may go again.")
+			display_event_description(going_actor.display_name + " used an instant move; they may go again.")
 			#print("please enter a number")
 			return
-		regenerate_conflict_resolution(going_actor_key)
+		regenerate_conflict_resolution(going_actor)
 		going_actor.action_value += av_input.text.to_int()
-		display_event_description(active_refs[going_actor_key].display_name + " used a " + av_input.text + " AV move.")
-		test_button_ready = false
-		going_actor = null
-		going_actor_key = null
-		calculate_turn_order()
-		turn_complete.emit()
+		display_event_description(going_actor.display_name + " used a " + av_input.text + " AV move.")
+		turn_cleanup()
 		#var going = active_refs[calculate_turn_order()[0]]
 		#going.action_value += av_input.text.to_int()
 		#regenerate_conflict_resolution(active_refs.find_key(going))
@@ -195,14 +144,10 @@ func _on_button_random_pressed() -> void:
 		#b.resolve()
 		action_stack.pop_front()
 		var new_av = randi() % 7 + 1
-		regenerate_conflict_resolution(going_actor_key)
+		regenerate_conflict_resolution(going_actor)
 		going_actor.action_value += new_av
-		display_event_description(active_refs[going_actor_key].display_name + " used a " + str(new_av) + " AV move.")
-		test_button_ready = false
-		going_actor = null
-		going_actor_key = null
-		turn_order_calculated.emit(calculate_turn_order())
-		turn_complete.emit()
+		display_event_description(going_actor.display_name + " used a " + str(new_av) + " AV move.")
+		turn_cleanup()
 		#var going = active_refs[calculate_turn_order()[0]]
 		#going.action_value += randi() % 7
 		#regenerate_conflict_resolution(active_refs.find_key(going))
@@ -213,114 +158,76 @@ func _on_button_random_pressed() -> void:
 		#execute_turn()
 
 func _on_cast_pressed() -> void:
-	if test_button_ready:
-		if cast_av_input.text == "" or cast_ct_input.text == "":
-			display_event_description("please enter a number")
-			print("please enter a number")
-			return
-		display_event_description(active_refs[going_actor_key].display_name + " began casting a " + cast_av_input.text + " AV and " + cast_ct_input.text + " CT spell.")
-		regenerate_conflict_resolution(going_actor_key)
-		
-		going_actor.action_value += cast_av_input.text.to_int()
-		var new_spell = generic_spell.instantiate()
-		move_container_refs[going_actor_key+"spell"].add_child(new_spell)
-		new_spell.action_value = cast_ct_input.text.to_int()
-		new_spell.display_name = going_actor.display_name + "'s Spell"
-		going_actor.casting = true
-		spell_conflict_resolution_order.append(going_actor_key+"spell")
-		test_button_ready = false
-		going_actor = null
-		going_actor_key = null
-		turn_order_calculated.emit(calculate_turn_order())
-		turn_complete.emit()
-		#var going_key = calculate_turn_order()[0]
-		#var going = active_refs[going_key]
-		#going.action_value += cast_av_input.text.to_int()
+	pass
+	#if test_button_ready:
+		#if cast_av_input.text == "" or cast_ct_input.text == "":
+			#display_event_description("please enter a number")
+			#print("please enter a number")
+			#return
+		#display_event_description(active_refs[going_actor_key].display_name + " began casting a " + cast_av_input.text + " AV and " + cast_ct_input.text + " CT spell.")
+		#regenerate_conflict_resolution(going_actor_key)
 		#
+		#going_actor.action_value += cast_av_input.text.to_int()
 		#var new_spell = generic_spell.instantiate()
-		#move_container_refs[going_key+"spell"].add_child(new_spell)
-		##print(move_container_refs[going_key+"spell"].get_children())
+		#move_container_refs[going_actor_key+"spell"].add_child(new_spell)
 		#new_spell.action_value = cast_ct_input.text.to_int()
-		#new_spell.display_name = going.display_name + "'s Spell"
-		#going.casting = true
-		#spell_conflict_resolution_order.append(going_key+"spell")
-		#regenerate_conflict_resolution(active_refs.find_key(going))
-		#test_button_ready = false
-		##if initial_order.size() > 0:
-			##initial_order.pop_front()
-		#turn_order_calculated.emit(calculate_turn_order())
-		#execute_turn()
+		#new_spell.display_name = going_actor.display_name + "'s Spell"
+		#going_actor.casting = true
+		#spell_conflict_resolution_order.append(going_actor_key+"spell")
+		#turn_cleanup()
 
 func _on_strike_test_pressed() -> void:
 	if test_button_ready:
 		display_event_description(going_actor.display_name + " used " + going_actor.move_list[0].move_name)
-		going_actor.move_list[0].add_to_action_stack(self, going_actor, active_refs[going_actor.opponent_key])
+		going_actor.move_list[0].add_to_action_stack(self, going_actor, teams[(going_actor.team-1)%1]["actives"][0])
 		resolve_action_stack()
-		test_button_ready = false
-		going_actor = null
-		going_actor_key = null
-		turn_order_calculated.emit(calculate_turn_order())
-		turn_complete.emit()
+		turn_cleanup()
 
 #endregion
 
 #region Utils
-func connect_move_containers():
-	for key in active_refs:
-		active_refs[key].connected_move_container = move_container_refs[key + "spell"]
-		#print(active_refs[key].connected_move_container)
-
-func get_active_spells():
-	var active_spells: Dictionary
-	for key in move_container_refs:
-		if len(move_container_refs[key].get_children()) > 0:
-			active_spells.get_or_add(key, move_container_refs[key].get_children()[0])
-	return active_spells
-
-func get_action_values() -> Dictionary:
-	return {"player1": active_refs["player1"].action_value, \
-			"player2": active_refs["player2"].action_value, \
-			"player1monster": active_refs["player1monster"].action_value, \
-			"player2monster": active_refs["player2monster"].action_value}
-
-func update_keys_on_monsters():
-	for key in active_refs:
-		if key.contains("monster"):
-			active_refs[key].own_key = key
-	for key in bench_1_refs:
-		bench_1_refs[key].own_key = key
-	for key in bench_2_refs:
-		bench_2_refs[key].own_key = key
+#TODO: Rework with better, newer spell handler
+#func get_active_spells():
+	#var active_spells: Dictionary
+	#for key in move_container_refs:
+		#if len(move_container_refs[key].get_children()) > 0:
+			#active_spells.get_or_add(key, move_container_refs[key].get_children()[0])
+	#return active_spells
 
 func connect_signals():
-	for key in active_refs:
-		if key.contains("monster"):
-			turn_begin.connect(active_refs[key].test_tactics_set)
-	for key in bench_1_refs:
-		turn_begin.connect(bench_1_refs[key].test_tactics_set)
-	for key in bench_2_refs:
-		turn_begin.connect(bench_2_refs[key].test_tactics_set)
+	for team in teams:
+		for key in team:
+			for actor in team[key]:
+				if actor is Monster:
+					turn_begin.connect(actor.test_tactics_set)
+		#if key.contains("monster"):
+			#turn_begin.connect(active_refs[key].test_tactics_set)
+	#for key in bench_1_refs:
+		#turn_begin.connect(bench_1_refs[key].test_tactics_set)
+	#for key in bench_2_refs:
+		#turn_begin.connect(bench_2_refs[key].test_tactics_set)
 
 func set_point_references_on_actors():
-	for actor in team_one:
-		if actor is Actor:
-			actor.team = 1
-			actor.ally_point = monster_point_player_1
-			actor.bench_point = player_1_bench
-			actor.rival_point = monster_point_player_2
-			actor.rival_bench_point = player_2_bench
-			actor.own_player_point = player_point_1
-			actor.rival_player_point = player_point_2
-	for actor in team_two:
-		if actor is Actor:
-			actor.team = 2
-			actor.ally_point = monster_point_player_2
-			actor.bench_point = player_2_bench
-			actor.rival_point = monster_point_player_1
-			actor.rival_bench_point = player_1_bench
-			actor.own_player_point = player_point_2
-			actor.rival_player_point = player_point_1
-
+	for key in team_zero:
+		for actor in team_zero[key]:
+			if actor is Actor:
+				actor.team = 0
+				actor.ally_point = monster_point_player_1
+				actor.bench_point = player_1_bench
+				actor.rival_point = monster_point_player_2
+				actor.rival_bench_point = player_2_bench
+				actor.own_player_point = player_point_1
+				actor.rival_player_point = player_point_2
+	for key in team_one:
+		for actor in team_one[key]:
+			if actor is Actor:
+				actor.team = 1
+				actor.ally_point = monster_point_player_2
+				actor.bench_point = player_2_bench
+				actor.rival_point = monster_point_player_1
+				actor.rival_bench_point = player_1_bench
+				actor.own_player_point = player_point_2
+				actor.rival_player_point = player_point_1
 #endregion
 
 #region Round and Turn Logic
@@ -341,18 +248,13 @@ func execute_round():
 	#tick time
 	round_time_tick.emit()
 	game_time += 1 #currently unused but good to have
-	for actor in active_refs:
-		active_refs[actor].action_value -= 1
-		#print(active_refs[actor].action_value)
+	for team in teams:
+		for key in team:
+			if key == "benched": continue
+			for actor in team[key]:
+				actor.action_value -= 1
 	calculate_turn_order()
-	#do spells and channels (channels todo)
-	for i in len(spell_conflict_resolution_order):
-		if len(spell_conflict_resolution_order) > 0:
-			if get_active_spells()[spell_conflict_resolution_order[0]].action_value <= 0:
-				action_stack.append(spell_conflict_resolution_order.pop_front())
-				calculate_turn_order()
-				await get_tree().create_timer(tick_time_length).timeout
-			else: break
+	#TODO: Handle cast time stuff
 	if len(action_stack) > 0:
 		resolve_action_stack()
 	#cleanup
@@ -361,13 +263,10 @@ func execute_round():
 
 func generate_to_go():
 	#generates a queue of 0AV simultaneous turns
-	var t_order: Array
+	var t_order = calculate_turn_order()
 	to_go = []
-	for turn in calculate_turn_order(): #decouple spells from the order
-		if not turn.contains("spell"):
-			t_order.append(turn)
 	for actor in t_order:
-		if get_action_values()[actor] == 0:
+		if actor.action_value == 0:
 			to_go.append(actor)
 
 func execute_to_go():
@@ -377,9 +276,8 @@ func execute_to_go():
 		await turn_complete
 	to_go_complete.emit()
 
-func execute_new_turn(actor: String):
-	going_actor_key = actor
-	going_actor = active_refs[going_actor_key]
+func execute_new_turn(actor: Actor):
+	going_actor = actor
 	test_button_ready = true
 	display_event_description(going_actor.display_name + "'s turn")
 	await get_tree().create_timer(tick_time_length).timeout
@@ -387,14 +285,11 @@ func execute_new_turn(actor: String):
 	if going_actor is Monster:
 		var was_instant = await going_actor.tactic_excecuted
 		resolve_action_stack()
-		if not was_instant: regenerate_conflict_resolution(going_actor_key)
-		else: to_go.insert(0, going_actor_key)
-		test_button_ready = false
-		going_actor = null
-		going_actor_key = null
-		calculate_turn_order()
-		turn_complete.emit()
+		if not was_instant: regenerate_conflict_resolution(going_actor)
+		else: to_go.insert(0, going_actor)
+		turn_cleanup()
 
+#TODO: Completely redo the stack into nu-Queue
 func add_move_to_stack(move: Move):
 	action_stack.append(move)
 	move.simulated_resolve()
@@ -433,28 +328,31 @@ func display_event_description(text: String):
 
 #region Turn Order Computation
 func generate_initial_order_random():
-	var actors = ["player1", "player2", "player1monster", "player2monster"]
+	var actors = []
+	for team in teams:
+		for key in team:
+			for actor in team[key]:
+				actors.append(actor)
 	actors.shuffle()
 	conflict_resolution_order = actors.duplicate()
 
+#TODO: Make doubly sure this is ok
 func regenerate_conflict_resolution(last_went):
-	#Populates conflictResolutionOrder with the 4 keys in order of the least recent turn taker to the most
-	if conflict_resolution_order.size() < 4:
-		conflict_resolution_order.append(last_went)
-		return
-	conflict_resolution_order.erase(last_went)
+	#trafficlight thingy
+	#if conflict_resolution_order.size() < 4:
+		#conflict_resolution_order.append(last_went)
+		#return
+	if conflict_resolution_order.has(last_went):
+		conflict_resolution_order.erase(last_went)
 	conflict_resolution_order.append(last_went)
 
+#TODO: Make sure it takes spells and channels into account
 func better_turn_order_algorithm(order: Array, cro: Array):
 	var avs = []
 	
-	var spells = spell_conflict_resolution_order.duplicate()
-	if len(spells)>0:
-		for key in spells:
-			avs.append([key, get_active_spells()[key].action_value])
-	
-	for key in cro:
-		avs.append([key, get_action_values()[key]])
+	for actor in cro:
+		if teams[0]["benched"].has(actor) or teams[1]["benched"].has(actor): continue #Skip the benches
+		avs.append([actor, actor.action_value])
 	
 	avs.sort_custom(\
 	func(a, b):
@@ -472,45 +370,58 @@ func calculate_turn_order() -> Array:
 	turn_order_calculated.emit(order)
 	return order
 
+func turn_cleanup():
+	test_button_ready = false
+	going_actor = null
+	turn_order_calculated.emit(calculate_turn_order())
+	turn_complete.emit()
 #endregion
 
 #region Switching Monsters Logic
-
-func swap_monster(monster_to_swap: String): #for player swapping; either a refactor or seperate function necessary for Tornado
+#TODO: extend for more than one active monster
+func swap_monster(monster_to_swap_in: Actor): #for player swapping; either a refactor or seperate function necessary for Tornado
 	#declarations
+	var team_no
 	var bench
-	var bench_refs
 	var active_point
-	var active_refs_key
 	
-	#check who's going and assign variables accordingly
-	if going_actor_key == "player1":
-		active_refs_key = "player1monster"
+	if teams[0]["players"].has(going_actor):
+		team_no = 0
 		active_point = monster_point_player_1
 		bench = player_1_bench
-		bench_refs = bench_1_refs
-	elif going_actor_key == "player2":
-		active_refs_key = "player2monster"
+	elif teams[1]["players"].has(going_actor):
+		team_no = 1
 		active_point = monster_point_player_2
 		bench = player_2_bench
-		bench_refs = bench_2_refs
-	if bench == null or bench_refs == null: return #just return if the variable assignments go funny; todo better error management
+	
+	#check who's going and assign variables accordingly
+	#if going_actor_key == "player1":
+		#active_refs_key = "player1monster"
+		#active_point = monster_point_player_1
+		#bench = player_1_bench
+		#bench_refs = bench_1_refs
+	#elif going_actor_key == "player2":
+		#active_refs_key = "player2monster"
+		#active_point = monster_point_player_2
+		#bench = player_2_bench
+		#bench_refs = bench_2_refs
+	if bench == null: return #just return if the variable assignments go funny; todo better error management
 	
 	#announce action
-	display_event_description(active_refs[going_actor_key].display_name + " switches out " + active_refs[active_refs_key].display_name + " for " + bench_refs[monster_to_swap].display_name + ".")
+	display_event_description(going_actor.display_name + " switches out " + teams[team_no]["actives"][0].display_name + " for " + monster_to_swap_in.display_name + ".")
 	
 	#declare and assign what's being moved
-	var out_mon = active_refs[active_refs_key]
-	var in_mon = bench_refs[monster_to_swap]
+	var out_mon = teams[team_no]["actives"][0]
+	var in_mon = monster_to_swap_in
 	var out_pos = out_mon.position
 	var in_pos = in_mon.position
 	
-	#interrupt spells
-	if out_mon.casting:
-		display_event_description(out_mon.display_name + "'s spell was interrupted")
-		out_mon.casting = false
-		spell_conflict_resolution_order.erase(active_refs_key+"spell")
-		out_mon.connected_move_container.get_children()[0].queue_free()
+	#TODO: interrupt spells
+	#if out_mon.casting:
+		#display_event_description(out_mon.display_name + "'s spell was interrupted")
+		#out_mon.casting = false
+		#spell_conflict_resolution_order.erase(active_refs_key+"spell")
+		#out_mon.connected_move_container.get_children()[0].queue_free()
 	
 	#swap parents and positions
 	active_point.remove_child(out_mon)
@@ -520,25 +431,16 @@ func swap_monster(monster_to_swap: String): #for player swapping; either a refac
 	out_mon.position = in_pos
 	in_mon.position = out_pos
 	
-	#cleanup move containers
-	out_mon.connected_move_container = null
-	connect_move_containers()
-	
-	update_keys_on_monsters()
-	
 	#update AVs and turn order neccesary stuff
 	going_actor.action_value += 3
-	regenerate_conflict_resolution(going_actor_key)
-	regenerate_conflict_resolution(active_refs_key)
+	regenerate_conflict_resolution(going_actor)
+	regenerate_conflict_resolution(in_mon)
 	
 	#regenerate to_go in case of a 0AV swap
+	#TODO: ensure this does not screw with instants
 	generate_to_go()
 	
 	#end of turn cleanup
-	test_button_ready = false
-	going_actor = null
-	going_actor_key = null
-	calculate_turn_order()
-	turn_complete.emit()
+	turn_cleanup()
 
 #endregion

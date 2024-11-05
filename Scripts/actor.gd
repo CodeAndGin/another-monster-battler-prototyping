@@ -60,10 +60,11 @@ func gain_shield(amount: int): #TODO: implement shield
 	pass
 
 func get_actor_targets(target_types: TargetStructure) -> Array[Actor]:
-	if not team or not ally_point or not bench_point \
+	if team == null or not ally_point or not bench_point \
 	or not rival_point or not rival_bench_point \
 	or not own_player_point or not rival_player_point:
-		printerr("DEBUG: At least 1 reference for targeting has not been set. Returning empty target list")
+		print(rival_player_point)
+		printerr("DEBUG: At least 1 reference for targeting has not been set on %s. Returning empty target list" % display_name)
 		return []
 	
 	var potential_targets: Array[Actor]

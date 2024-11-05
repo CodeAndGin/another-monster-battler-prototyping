@@ -1,6 +1,6 @@
 extends Control
 
-@onready var arena_root = $"../.."
+@onready var arena_root: Arena = $"../.."
 @onready var switch_mon_menu = $"Switch Mon Menu"
 @onready var switch_mon_button = $"Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button"
 @onready var direct_order_menu = $"Direct Order Menu"
@@ -13,7 +13,7 @@ func _process(delta: float) -> void:
 
 func _ready() -> void:
 	switch_mon_menu.populate_buttons($"../../arena/Bench1") #populate causes weird scaling on first use no idea why; this mitigates the issue
-	reset_all_buttons()
+	#reset_all_buttons()
 
 func _on_direct_order_button_toggled(toggled_on: bool) -> void:
 	if toggled_on: detoggle("Direct Order Menu")
@@ -22,11 +22,11 @@ func _on_direct_order_button_toggled(toggled_on: bool) -> void:
 	direct_order_menu.visible = toggled_on
 
 func _on_switch_monster_button_toggled(toggled_on: bool) -> void:
-	if arena_root.going_actor_key == "player1":
+	if arena_root.teams[0]["players"].has(arena_root.going_actor):#arena_root.going_actor_key == "player1":
 		if toggled_on: detoggle("Switch Mon Menu")
 		switch_mon_menu.populate_buttons(arena_root.player_1_bench)
 		switch_mon_menu.visible = toggled_on
-	elif arena_root.going_actor_key == "player2":
+	elif arena_root.teams[1]["players"].has(arena_root.going_actor):
 		if toggled_on: detoggle("Switch Mon Menu")
 		switch_mon_menu.populate_buttons(arena_root.player_2_bench)
 		switch_mon_menu.visible = toggled_on
@@ -71,9 +71,9 @@ func reset_all_buttons():
 
 func _on_confirm_pressed() -> void:
 	if switch_mon_menu.button1.button_pressed:
-		arena_root.swap_monster("bmonster1")
+		arena_root.swap_monster(arena_root.teams[arena_root.going_actor.team]["benched"][0])
 	if switch_mon_menu.button2.button_pressed:
-		arena_root.swap_monster("bmonster2")
+		arena_root.swap_monster(arena_root.teams[arena_root.going_actor.team]["benched"][1])
 	reset_all_buttons()
 
 
@@ -84,26 +84,26 @@ func _on_battle_arena_turn_begin(goer: Variant) -> void:
 
 func update_healthbars():
 	healthbars.get_node("P1/MonHealthBar1").draw_bar(
-	arena_root.active_refs["player1monster"].display_name, 
-	arena_root.active_refs["player1monster"].hp, 
-	arena_root.active_refs["player1monster"].MAX_HP)
+	arena_root.teams[0]["actives"][0].display_name, 
+	arena_root.teams[0]["actives"][0].hp, 
+	arena_root.teams[0]["actives"][0].MAX_HP)
 	healthbars.get_node("P1/MonHealthBar2").draw_bar(
-	arena_root.bench_1_refs["bmonster1"].display_name, 
-	arena_root.bench_1_refs["bmonster1"].hp, 
-	arena_root.bench_1_refs["bmonster1"].MAX_HP)
+	arena_root.teams[0]["benched"][0].display_name, 
+	arena_root.teams[0]["benched"][0].hp, 
+	arena_root.teams[0]["benched"][0].MAX_HP)
 	healthbars.get_node("P1/MonHealthBar3").draw_bar(
-	arena_root.bench_1_refs["bmonster2"].display_name, 
-	arena_root.bench_1_refs["bmonster2"].hp, 
-	arena_root.bench_1_refs["bmonster2"].MAX_HP)
+	arena_root.teams[0]["benched"][1].display_name, 
+	arena_root.teams[0]["benched"][1].hp, 
+	arena_root.teams[0]["benched"][1].MAX_HP)
 	healthbars.get_node("P2/MonHealthBar1").draw_bar(
-	arena_root.active_refs["player2monster"].display_name, 
-	arena_root.active_refs["player2monster"].hp, 
-	arena_root.active_refs["player2monster"].MAX_HP)
+	arena_root.teams[1]["actives"][0].display_name, 
+	arena_root.teams[1]["actives"][0].hp, 
+	arena_root.teams[1]["actives"][0].MAX_HP)
 	healthbars.get_node("P2/MonHealthBar2").draw_bar(
-	arena_root.bench_2_refs["bmonster1"].display_name, 
-	arena_root.bench_2_refs["bmonster1"].hp, 
-	arena_root.bench_2_refs["bmonster1"].MAX_HP)
+	arena_root.teams[1]["benched"][0].display_name, 
+	arena_root.teams[1]["benched"][0].hp, 
+	arena_root.teams[1]["benched"][0].MAX_HP)
 	healthbars.get_node("P2/MonHealthBar3").draw_bar(
-	arena_root.bench_2_refs["bmonster2"].display_name, 
-	arena_root.bench_2_refs["bmonster2"].hp, 
-	arena_root.bench_2_refs["bmonster2"].MAX_HP)
+	arena_root.teams[1]["benched"][1].display_name, 
+	arena_root.teams[1]["benched"][1].hp, 
+	arena_root.teams[1]["benched"][1].MAX_HP)
