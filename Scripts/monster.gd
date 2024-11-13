@@ -51,7 +51,7 @@ func test_tactics_set(user):
 		var tactic: Tactic = active_set[key]
 		var potential_targets = get_actor_targets(tactic.move.targets)
 		var condition: TacticsCondition = tactic.condition
-		potential_targets = condition.check(self, potential_targets)
+		potential_targets = condition.check(arena, self, potential_targets)
 		if potential_targets == []: continue
 		var target = choose_target_by_priority(potential_targets, tactic.priority)
 		var checks = tactic.move.check_if_can_use_cost(self) and tactic.move.check_if_can_use_on_target(self, target)

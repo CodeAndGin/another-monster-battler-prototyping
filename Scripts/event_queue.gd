@@ -4,19 +4,28 @@ var current: Move
 var afters: Array
 
 var tactics_to_check: Array
+var tactic_users: Dictionary
+
+const BEFORE = GlobalUtils.ReactionTimings.BEFORE
+const AFTER = GlobalUtils.ReactionTimings.AFTER
 
 #{Move: tactics_line_index(int)}
 var tracker: Dictionary
 
-func _init(move: Move, arena: Arena) -> void:
+var arena: Arena
+
+func _init(move: Move, _arena: Arena) -> void:
 	current = move
-	collate_tactics(arena)
+	arena = _arena
+	collate_reaction_tactics(_arena)
 	add_to_tracker(current)
 
 func add_to_tracker(move: Move) -> void:
 	tracker[move] = 0
 
-func collate_tactics(arena: Arena) -> void:
+func collate_reaction_tactics(arena: Arena) -> void:
+	tactics_to_check = []
+	tactic_users = {}
 	var cro = arena.conflict_resolution_order.duplicate()
 	for actor in cro:
 		if actor is not Monster: continue
@@ -25,13 +34,16 @@ func collate_tactics(arena: Arena) -> void:
 		for key in keys:
 			if not t[key]: continue
 			tactics_to_check.append(t[key])
+			tactic_users[t[key]] = actor
 
 func resolve_step() -> bool:
 	if tracker[current] < len(tactics_to_check):
-		#TODO: check the tactic
+		#TODO: check the tactic for befores
+		var r = check_for_reaction_at_index(tracker[current], BEFORE, current)
 		tracker[current] += 1
+		if r: add_before(r)
 		return false
-	current.resolve()
+	current.resolve() #TODO: Check the tactic for afters
 	current = afters.pop_front() if len(afters) > 0 else null
 	return false if current else true
 
@@ -43,6 +55,37 @@ func add_before(move: Move) -> void:
 func add_after(move: Move) -> void:
 	afters.append(move)
 	add_to_tracker(move)
+
+
+func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.ReactionTimings, move_to_check_against: Move):
+	var tactic: Tactic = tactics_to_check[index] if tactics_to_check[index] is Tactic else null
+	if not tactic: return null
+	var user: Monster = tactic_users[tactic] if tactic_users[tactic] is Actor else null
+	if not user: return null
+	var reaction = tactic.move if tactic.move is Reaction else null
+	reaction = reaction as Reaction
+	if not reaction: return null
+	if reaction.before_or_after != before_or_after: return null
+	if not reaction.reaction_timing_condition.check(user, move_to_check_against): return null
+	
+	var actor_targets = user.get_actor_targets(reaction.targets)
+	var check = tactic.condition.check(arena, user, actor_targets, reaction, move_to_check_against)
+	if check is Array and check == []: return null
+	#check should be Array[Actor] or Move at this point (i hope)
+	var actor_target
+	if check is Array:
+		actor_target = user.choose_target_by_priority(check, tactic.priority)
+		var r = reaction.duplicate()
+		r.user = user
+		r.target = actor_target
+		return r
+	var r = reaction.duplicate()
+	r.user = user
+	r.move_target = move_to_check_against
+	return r
+
+
+
 # queue checks for "before" reactions to the next event to resolve (ie the front of the queue) #
 # if a before reaction is found, it enters at the front of the queue, and reactions for it are then checked #
 # The queue remembers where in the reactions it's checking it found a before, and once it's resolved, continues checking #

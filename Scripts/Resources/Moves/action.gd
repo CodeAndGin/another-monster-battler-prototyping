@@ -7,71 +7,79 @@ class_name Action
 @export var is_instant: bool
 ##Only to be used when copied for placing on the stack
 
-func _init(_user: Actor = null, _target: Monster = null, to_copy: Action = null) -> void:
-	if to_copy:
-#region Variable copying
-		move_type = to_copy.move_type
-		move_name = to_copy.move_name
-		
-		bespoke_effect = to_copy.bespoke_effect
-		bespoke_cost = to_copy.bespoke_cost
-		
-		is_melee = to_copy.is_melee
-		is_instant = to_copy.is_instant
-		
-		internal_order_of_effects = to_copy.internal_order_of_effects
-		
-		_min_phys_damage = to_copy._min_phys_damage
-		_max_phys_damage = to_copy._max_phys_damage
-		
-		_min_mag_damage = to_copy._min_mag_damage
-		_max_mag_damage = to_copy._max_mag_damage
-		
-		_min_stat_damage = to_copy._min_stat_damage
-		_max_stat_damage = to_copy._max_stat_damage
-		
-		_min_heal = to_copy._min_heal
-		_max_heal = to_copy._max_heal
-		
-		_min_rally = to_copy._min_rally
-		_max_rally = to_copy._max_rally
-		
-		_min_risk = to_copy._min_risk
-		_max_risk = to_copy._max_risk
-		
-		_min_guard = to_copy._min_guard
-		_max_guard = to_copy._max_guard
-		
-		_min_shield = to_copy._min_shield
-		_max_shield = to_copy._max_shield
-		
-		_min_poison = to_copy._min_poison
-		_max_poison = to_copy._max_poison
-		
-		_min_burn = to_copy._min_burn
-		_max_burn = to_copy._max_burn
-		
-		av_cost = to_copy.av_cost
-		rv_cost = to_copy.rv_cost
-		ct_cost = to_copy.ct_cost
-#endregion
-		user = _user
-		target = _target
-		
-		if user and target:
-			calculated_phys_damage_amount = phys_damage_amount
-			calculated_mag_damage_amount = mag_damage_amount
-			calculated_stat_damage_amount = stat_damage_amount
-			calculated_heal_amount = heal_amount
-			calculated_rally_amount = rally_amount
-			calculated_risk_amount = risk_amount
-			calculated_guard_amount = guard_amount
-			calculated_shield_amount = shield_amount
-			calculated_poison_amount = poison_amount
-			calculated_burn_amount = burn_amount
+#func _init(_user: Actor = null, _target: Monster = null, to_copy: Action = null) -> void:
+	#if to_copy:
+##region Variable copying
+		#move_type = to_copy.move_type
+		#move_name = to_copy.move_name
+		#
+		#bespoke_effect = to_copy.bespoke_effect
+		#bespoke_cost = to_copy.bespoke_cost
+		#
+		#is_melee = to_copy.is_melee
+		#is_instant = to_copy.is_instant
+		#
+		#internal_order_of_effects = to_copy.internal_order_of_effects
+		#
+		#_min_phys_damage = to_copy._min_phys_damage
+		#_max_phys_damage = to_copy._max_phys_damage
+		#
+		#_min_mag_damage = to_copy._min_mag_damage
+		#_max_mag_damage = to_copy._max_mag_damage
+		#
+		#_min_stat_damage = to_copy._min_stat_damage
+		#_max_stat_damage = to_copy._max_stat_damage
+		#
+		#_min_heal = to_copy._min_heal
+		#_max_heal = to_copy._max_heal
+		#
+		#_min_rally = to_copy._min_rally
+		#_max_rally = to_copy._max_rally
+		#
+		#_min_risk = to_copy._min_risk
+		#_max_risk = to_copy._max_risk
+		#
+		#_min_guard = to_copy._min_guard
+		#_max_guard = to_copy._max_guard
+		#
+		#_min_shield = to_copy._min_shield
+		#_max_shield = to_copy._max_shield
+		#
+		#_min_poison = to_copy._min_poison
+		#_max_poison = to_copy._max_poison
+		#
+		#_min_burn = to_copy._min_burn
+		#_max_burn = to_copy._max_burn
+		#
+		#av_cost = to_copy.av_cost
+		#rv_cost = to_copy.rv_cost
+		#ct_cost = to_copy.ct_cost
+##endregion
+		#user = _user
+		#target = _target
+		#
+		#if user and target:
+			#calculate_amounts()
+
+func calculate_amounts():
+	calculated_phys_damage_amount = phys_damage_amount
+	calculated_mag_damage_amount = mag_damage_amount
+	calculated_stat_damage_amount = stat_damage_amount
+	calculated_heal_amount = heal_amount
+	calculated_rally_amount = rally_amount
+	calculated_risk_amount = risk_amount
+	calculated_guard_amount = guard_amount
+	calculated_shield_amount = shield_amount
+	calculated_poison_amount = poison_amount
+	calculated_burn_amount = burn_amount
 
 func copy(_user: Actor, _target: Monster) -> Action:
-	return Action.new(_user, _target, self)
+	var copied = self.duplicate(true)
+	copied.user = _user
+	copied.target = _target
+	copied.calculate_amounts()
+	return copied
+	#return Action.new(_user, _target, self)
 
 func check_if_can_use_on_target(_user: Actor, _target: Actor) -> bool:
 	if _target is not Monster: return false

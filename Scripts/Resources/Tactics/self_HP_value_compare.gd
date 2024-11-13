@@ -48,7 +48,7 @@ func is_condition_met(user: Actor = null, target: Actor = null, move_target: Mov
 			return not user.hp >= amount_to_compare_against
 	return false
 
-func check(user: Actor = null, potential_targets: Array[Actor] = [], move_target: Move = null):# -> Array[Actor]:
+func check(arena: Arena = null, user: Actor = null, potential_targets: Array[Actor] = [], move_to_use: Move = null, move_target: Move = null):# -> Array[Actor]:
 	if not user:
 		printerr("This comparison type expects a user to be passed in")
 		return []

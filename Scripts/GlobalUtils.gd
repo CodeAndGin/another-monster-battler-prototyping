@@ -47,6 +47,12 @@ enum TargetTypes \
 	ALLY
 }
 
+enum ReactionTimings \
+{
+	BEFORE,
+	AFTER
+}
+
 enum PlayerIdents \
 {
 	PLAYER,

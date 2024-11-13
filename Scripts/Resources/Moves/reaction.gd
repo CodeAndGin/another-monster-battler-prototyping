@@ -1,9 +1,12 @@
 extends Move
 class_name Reaction
 
-@export var bespoke_internal_reaction_trigger_condition: BespokeInternalReactionTriggerCondition
+@export var reaction_timing_condition: ReactionTimingCondition
 
-var trigger: SimulationResult
+@export var before_or_after: GlobalUtils.ReactionTimings
 
 @export var modifies_move: bool
 var move_target: Move
+
+func resolve():
+	pass

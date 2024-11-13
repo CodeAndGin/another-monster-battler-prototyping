@@ -170,3 +170,6 @@ func check_if_can_use_cost(_user: Actor) -> bool:
 
 func check_if_can_use_on_target(_user: Actor, _target: Actor) -> bool:
 	return bespoke_target_check.bespoke_target_check(_user, _target)
+
+func resolve():
+	pass
