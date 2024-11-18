@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dafxi6djap6hu"]
+[gd_scene load_steps=28 format=3 uid="uid://dafxi6djap6hu"]
 
 [ext_resource type="Script" path="res://Scripts/battle_arena.gd" id="1_rw6c8"]
 [ext_resource type="PackedScene" uid="uid://b7mxqokcravnv" path="res://Gameplay Scenes/arena.tscn" id="1_ygb6g"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://dij256j18u2pw" path="res://UI Scenes/switch_mon_menu.tscn" id="8_756s2"]
 [ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="9_dcj35"]
 [ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="9_do8yt"]
+[ext_resource type="Resource" uid="uid://dm5fd07dp7j6w" path="res://Scripts/Resources/Moves/Backtabby/reflexes.tres" id="11_tqoo6"]
 [ext_resource type="PackedScene" uid="uid://4ogvq3skswfl" path="res://UI Scenes/mon_health_bar.tscn" id="12_dmapu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcgp1"]
@@ -41,6 +42,17 @@ condition = SubResource("Resource_y18sm")
 priority = 0
 move = ExtResource("9_do8yt")
 
+[sub_resource type="Resource" id="Resource_vphxi"]
+script = ExtResource("8_3i3pi")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_ohqtb"]
+script = ExtResource("9_dcj35")
+condition = SubResource("Resource_vphxi")
+priority = 0
+move = ExtResource("11_tqoo6")
+
 [sub_resource type="Resource" id="Resource_jtbml"]
 script = ExtResource("8_3i3pi")
 amount_to_compare_against = 0
@@ -59,7 +71,7 @@ setA = {
 "Fifth": null,
 "Fifth reaction": null,
 "First": SubResource("Resource_63nq8"),
-"First reaction": null,
+"First reaction": SubResource("Resource_ohqtb"),
 "Fourth": null,
 "Fourth reaction": null,
 "Second": SubResource("Resource_6s241"),
@@ -82,7 +94,7 @@ setB = {
 
 [node name="BattleArena" type="Node3D"]
 script = ExtResource("1_rw6c8")
-tick_time_length = 0.5
+tick_time_length = 2.0
 generic_spell = ExtResource("2_8bg6a")
 test_move = ExtResource("3_3whsq")
 

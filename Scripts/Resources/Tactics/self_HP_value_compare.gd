@@ -52,30 +52,30 @@ func check(arena: Arena = null, user: Actor = null, potential_targets: Array[Act
 	if not user:
 		printerr("This comparison type expects a user to be passed in")
 		return []
-	
+	var to_return = move_target if move_target else potential_targets
 	match comparison:
 		GlobalUtils.Comparisons.IS:
-			if user.hp == amount_to_compare_against: return potential_targets
+			if user.hp == amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_NOT:
-			if user.hp != amount_to_compare_against: return potential_targets
+			if user.hp != amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_EQUAL_TO:
-			if user.hp == amount_to_compare_against: return potential_targets
+			if user.hp == amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_NOT_EQUAL_TO:
-			if user.hp != amount_to_compare_against: return potential_targets
+			if user.hp != amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_LESS_THAN:
-			if user.hp < amount_to_compare_against: return potential_targets
+			if user.hp < amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_NOT_LESS_THAN:
-			if not user.hp < amount_to_compare_against: return potential_targets
+			if not user.hp < amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_LESS_THAN_OR_EQUAL_TO:
-			if user.hp <= amount_to_compare_against: return potential_targets
+			if user.hp <= amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_NOT_LESS_THAN_OR_EQUAL_TO:
-			if not user.hp <= amount_to_compare_against: return potential_targets
+			if not user.hp <= amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_GREATER_THAN:
-			if user.hp > amount_to_compare_against: return potential_targets
+			if user.hp > amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_NOT_GREATER_THAN:
-			if not user.hp > amount_to_compare_against: return potential_targets
+			if not user.hp > amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_GREATER_THAN_OR_EQUAL_TO:
-			if user.hp >= amount_to_compare_against: return potential_targets
+			if user.hp >= amount_to_compare_against: return to_return
 		GlobalUtils.Comparisons.IS_NOT_GREATER_THAN_OR_EQUAL_TO:
-			if not user.hp >= amount_to_compare_against: return potential_targets
+			if not user.hp >= amount_to_compare_against: return to_return
 	return []

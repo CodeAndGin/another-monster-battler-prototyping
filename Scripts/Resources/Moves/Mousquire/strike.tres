@@ -8,12 +8,13 @@ script = ExtResource("2_afbi4")
 benched = Array[int]([])
 active = Array[int]([1])
 players = Array[int]([])
+targets_move = false
 
 [resource]
 script = ExtResource("1_q1sr5")
-move_type = 0
 is_melee = true
 is_instant = false
+move_type = 0
 move_name = "Strike"
 targets = SubResource("Resource_g7qwd")
 internal_order_of_effects = Array[int]([0])

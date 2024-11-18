@@ -61,12 +61,11 @@ func test_tactics_set(user):
 			continue
 		if not checks: continue
 		move.add_to_action_stack(arena, self, target)
-		arena.display_event_description(display_name + " used " + move.move_name + (" (Instant)" if move.is_instant else ""))
+		arena.display_event_description(display_name + " started to use " + move.move_name + (" (Instant)" if move.is_instant else ""))
 		was_instant = move.is_instant
 		went = true
-		#TODO: Handle instants somehow
 		break
-	if not went: av += 2
+	if not went: av += 2 #for now
 	tactic_excecuted.emit(was_instant)
 
 func choose_target_by_priority(potential_targets: Array[Actor], priority: GlobalUtils.TargetPriorities) -> Actor:

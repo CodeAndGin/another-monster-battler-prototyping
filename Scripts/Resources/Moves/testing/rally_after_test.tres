@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="Reaction" load_steps=4 format=3 uid="uid://d35yjd8ykh1jf"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/reaction.gd" id="1_gl0o5"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/target_structure.gd" id="2_56mkf"]
+
+[sub_resource type="Resource" id="Resource_0qthd"]
+script = ExtResource("2_56mkf")
+benched = Array[int]([])
+active = Array[int]([0])
+players = Array[int]([])
+targets_move = false
+
+[resource]
+script = ExtResource("1_gl0o5")
+before_or_after = 1
+modifies_move = false
+move_type = 8
+move_name = "Rally After Test"
+targets = SubResource("Resource_0qthd")
+internal_order_of_effects = Array[int]([4])
+_min_phys_damage = 0
+_max_phys_damage = 0
+_min_mag_damage = 0
+_max_mag_damage = 0
+_min_stat_damage = 0
+_max_stat_damage = 0
+_min_heal = 0
+_max_heal = 0
+_min_rally = 1
+_max_rally = 1
+_min_risk = 0
+_max_risk = 0
+_min_guard = 0
+_max_guard = 0
+_min_shield = 0
+_max_shield = 0
+_min_poison = 0
+_max_poison = 0
+_min_burn = 0
+_max_burn = 0
+av_cost = 0
+rv_cost = 0
+ct_cost = 0

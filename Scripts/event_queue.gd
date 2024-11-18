@@ -41,20 +41,30 @@ func resolve_step() -> bool:
 		#TODO: check the tactic for befores
 		var r = check_for_reaction_at_index(tracker[current], BEFORE, current)
 		tracker[current] += 1
-		if r: add_before(r)
-		return false
+		if r: await add_before(r)
+		return true
 	current.resolve() #TODO: Check the tactic for afters
+	for i in len(tactics_to_check):
+		var r = check_for_reaction_at_index(i, AFTER, current)
+		if r: await add_after(r)
+	arena.display_event_description(current.user.display_name + " used " + current.move_name + (" (Instant)" if current.is_instant if current is Action else false else ""))
 	current = afters.pop_front() if len(afters) > 0 else null
-	return false if current else true
+	if current: await arena.get_tree().create_timer(arena.tick_time_length).timeout
+	return true if current else false
 
 func add_before(move: Move) -> void:
 	afters.insert(0, current)
 	current = move
+	arena.display_event_description(current.user.display_name + " started to use " + current.move_name)
 	add_to_tracker(move)
+	await arena.get_tree().create_timer(arena.tick_time_length).timeout
+	#await arena.get_tree().create_timer(arena.tick_time_length).timeout
 
 func add_after(move: Move) -> void:
 	afters.append(move)
 	add_to_tracker(move)
+	arena.display_event_description(move.user.display_name + " prepared to use " + move.move_name)
+	await arena.get_tree().create_timer(arena.tick_time_length).timeout
 
 
 func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.ReactionTimings, move_to_check_against: Move):
@@ -70,7 +80,9 @@ func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.Reacti
 	
 	var actor_targets = user.get_actor_targets(reaction.targets)
 	var check = tactic.condition.check(arena, user, actor_targets, reaction, move_to_check_against)
+	
 	if check is Array and check == []: return null
+	if not reaction.check_if_can_use_cost(user): return null
 	#check should be Array[Actor] or Move at this point (i hope)
 	var actor_target
 	if check is Array:

@@ -1,0 +1,53 @@
+[gd_resource type="Resource" script_class="Reaction" load_steps=8 format=3 uid="uid://dm5fd07dp7j6w"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/before_incoming_skill.gd" id="1_6m386"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/reaction.gd" id="1_a1ktc"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/dodge_effect.gd" id="1_tcwcv"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/target_structure.gd" id="3_sh1ca"]
+
+[sub_resource type="Resource" id="Resource_0b6hk"]
+script = ExtResource("1_tcwcv")
+
+[sub_resource type="Resource" id="Resource_jmsqe"]
+script = ExtResource("1_6m386")
+
+[sub_resource type="Resource" id="Resource_egtqg"]
+script = ExtResource("3_sh1ca")
+benched = Array[int]([])
+active = Array[int]([])
+players = Array[int]([])
+targets_move = true
+
+[resource]
+script = ExtResource("1_a1ktc")
+reaction_timing_condition = SubResource("Resource_jmsqe")
+before_or_after = 0
+modifies_move = false
+move_type = 8
+move_name = "Reflexes"
+targets = SubResource("Resource_egtqg")
+bespoke_effect = SubResource("Resource_0b6hk")
+internal_order_of_effects = Array[int]([10])
+_min_phys_damage = 0
+_max_phys_damage = 0
+_min_mag_damage = 0
+_max_mag_damage = 0
+_min_stat_damage = 0
+_max_stat_damage = 0
+_min_heal = 0
+_max_heal = 0
+_min_rally = 0
+_max_rally = 0
+_min_risk = 0
+_max_risk = 0
+_min_guard = 0
+_max_guard = 0
+_min_shield = 0
+_max_shield = 0
+_min_poison = 0
+_max_poison = 0
+_min_burn = 0
+_max_burn = 0
+av_cost = 0
+rv_cost = -6
+ct_cost = 0

@@ -1,6 +1,7 @@
 extends Resource
 class_name Move
 
+@export var move_type: GlobalUtils.ActionTypes
 @export var move_name: String
 @export var targets: TargetStructure
 

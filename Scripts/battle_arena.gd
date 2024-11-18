@@ -82,6 +82,8 @@ var to_go: Array
 var action_stack: Array
 var after_action_stack: Array
 
+var queue: EventQueue
+
 var round_in_progress = false
 
 var conflict_resolution_order = []
@@ -284,21 +286,28 @@ func execute_new_turn(actor: Actor):
 	turn_begin.emit(going_actor)
 	if going_actor is Monster:
 		var was_instant = await going_actor.tactic_excecuted
-		resolve_action_stack()
+		await get_tree().create_timer(tick_time_length).timeout
+		if queue: await resolve_action_stack()
 		if not was_instant: regenerate_conflict_resolution(going_actor)
 		else: to_go.insert(0, going_actor)
 		turn_cleanup()
 
 #TODO: Completely redo the stack into nu-Queue
 func add_move_to_stack(move: Move):
-	action_stack.append(move)
-	move.simulated_resolve()
+	#action_stack.append(move)
+	queue = EventQueue.new(move, self)
+	#await get_tree().create_timer(tick_time_length).timeout
 
 func resolve_action_stack():
 	#placeholder code for test spells
-	while len(action_stack) > 0:
-		var action = action_stack.pop_back()
-		action.resolve()
+	var go = true
+	while go:
+		go = await queue.resolve_step()
+	queue = null
+	return
+	#while len(action_stack) > 0:
+		#var action = action_stack.pop_back()
+		#action.resolve()
 
 func resolve_after_action_stack():
 	pass
@@ -373,7 +382,7 @@ func calculate_turn_order() -> Array:
 func turn_cleanup():
 	test_button_ready = false
 	going_actor = null
-	turn_order_calculated.emit(calculate_turn_order())
+	calculate_turn_order()
 	turn_complete.emit()
 #endregion
 

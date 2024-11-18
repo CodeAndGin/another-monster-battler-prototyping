@@ -8,12 +8,13 @@ script = ExtResource("2_vpy4k")
 benched = Array[int]([])
 active = Array[int]([1])
 players = Array[int]([])
+targets_move = false
 
 [resource]
 script = ExtResource("1_l2yt1")
-move_type = 0
 is_melee = true
 is_instant = true
+move_type = 0
 move_name = "Graze"
 targets = SubResource("Resource_dt1hj")
 internal_order_of_effects = Array[int]([0])

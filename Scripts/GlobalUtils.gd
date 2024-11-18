@@ -2,14 +2,21 @@ class_name GlobalUtils
 
 enum ActionTypes \
 {
+	##Probably melee and physical without CT
 	SKILL,
+	##Probably ranged and magical with CT
 	SPELL,
+	##Creates Field effects
 	FIELD,
+	##Creates Trap effects
 	TRAP,
+	##Similar to spell, but effects happen more often during CT
 	CHANNEL,
 	COMBO,
 	BUFF,
-	DEBUFF
+	DEBUFF,
+	
+	REACTION
 }
 
 enum MoveEffectTypes \
