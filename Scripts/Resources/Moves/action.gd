@@ -6,18 +6,6 @@ class_name Action
 @export var is_melee: bool
 @export var is_instant: bool
 
-func calculate_amounts():
-	calculated_phys_damage_amount = phys_damage_amount
-	calculated_mag_damage_amount = mag_damage_amount
-	calculated_stat_damage_amount = stat_damage_amount
-	calculated_heal_amount = heal_amount
-	calculated_rally_amount = rally_amount
-	calculated_risk_amount = risk_amount
-	calculated_guard_amount = guard_amount
-	calculated_shield_amount = shield_amount
-	calculated_poison_amount = poison_amount
-	calculated_burn_amount = burn_amount
-
 #Duplicates the Resource and sets targets for use in an EventQueue
 func copy(_user: Actor, _target: Monster) -> Action:
 	var copied = self.duplicate(true)
@@ -100,32 +88,44 @@ func resolve():
 	user.action_value += av_cost
 	user.rv += rv_cost
 	print(move_name)
+	var results = {}
 	for type in internal_order_of_effects:
 		match type:
 			GlobalUtils.MoveEffectTypes.PHYS_DAMAGE:
-				target.take_physical_damage(calculated_phys_damage_amount)
+				var r = target.take_physical_damage(calculated_phys_damage_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.MAG_DAMAGE:
-				target.take_magical_damage(calculated_mag_damage_amount)
+				var r = target.take_magical_damage(calculated_mag_damage_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.STAT_DAMAGE:
-				target.take_status_damage(calculated_stat_damage_amount)
+				var r = target.take_status_damage(calculated_stat_damage_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.HEAL:
-				user.heal(calculated_heal_amount)
+				var r = user.heal(calculated_heal_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.RALLY:
-				user.rally(calculated_rally_amount)
+				var r = user.rally(calculated_rally_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.RISK:
-				target.take_risk(calculated_risk_amount)
+				var r = target.take_risk(calculated_risk_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.GUARD:
-				user.gain_guard(calculated_guard_amount)
+				var r = user.gain_guard(calculated_guard_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.SHIELD:
-				user.gain_shield(calculated_shield_amount)
+				var r = user.gain_shield(calculated_shield_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.POISON:
-				target.take_poison(calculated_poison_amount)
+				var r = target.take_poison(calculated_poison_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.BURN:
-				target.take_burn(calculated_burn_amount)
+				var r = target.take_burn(calculated_burn_amount)
+				convert_results_from_array_to_dict(r, results)
 			GlobalUtils.MoveEffectTypes.BESPOKE:
 				bespoke_effect.bespoke_effect(user, target)
 			_:
 				printerr("DEBUG: Chosen type " + GlobalUtils.MoveEffectTypes.keys()[type] + " is not recognised")
+	return results
 
 func create_spell():
 	pass

@@ -1,7 +1,11 @@
-[gd_resource type="Resource" script_class="Reaction" load_steps=4 format=3 uid="uid://d35yjd8ykh1jf"]
+[gd_resource type="Resource" script_class="Reaction" load_steps=6 format=3 uid="uid://d35yjd8ykh1jf"]
 
 [ext_resource type="Script" path="res://Scripts/Resources/Moves/reaction.gd" id="1_gl0o5"]
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/rtc_took_damage.gd" id="1_jbo5d"]
 [ext_resource type="Script" path="res://Scripts/Resources/Moves/target_structure.gd" id="2_56mkf"]
+
+[sub_resource type="Resource" id="Resource_onvuw"]
+script = ExtResource("1_jbo5d")
 
 [sub_resource type="Resource" id="Resource_0qthd"]
 script = ExtResource("2_56mkf")
@@ -12,6 +16,7 @@ targets_move = false
 
 [resource]
 script = ExtResource("1_gl0o5")
+reaction_timing_condition = SubResource("Resource_onvuw")
 before_or_after = 1
 modifies_move = false
 move_type = 8

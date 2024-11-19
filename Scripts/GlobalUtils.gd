@@ -66,6 +66,19 @@ enum PlayerIdents \
 	RIVAL_PLAYER
 }
 
+enum AfterEffectTriggers \
+{
+	PHYS_DAMAGE,
+	MAG_DAMAGE,
+	STAT_DAMAGE,
+	HEAL,
+	RALLY,
+	RISK,
+	GUARD,
+	SHIELD,
+	POISON,
+	BURN,
+}
 #enum EventStates \
 #{
 	#

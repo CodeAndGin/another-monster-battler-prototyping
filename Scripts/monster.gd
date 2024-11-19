@@ -103,7 +103,7 @@ func take_damage_to_shield(amount: int) -> int:
 
 #region functions to add Damage, risk, poison, etc.
 func take_physical_damage(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
 	if risk_and_guard > 0: #guard
 		while risk_and_guard > 0 or to_take > 0:
@@ -116,40 +116,44 @@ func take_physical_damage(amount: int):
 			risk_and_guard += 1
 			to_boost -= 1
 	to_take = take_damage_to_shield(to_take)
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	hp -= to_take
+	return [self, GlobalUtils.AfterEffectTriggers.PHYS_DAMAGE, to_take]
 
 func take_magical_damage(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
 	to_take = take_damage_to_shield(to_take)
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	hp -= to_take
+	return [self, GlobalUtils.AfterEffectTriggers.MAG_DAMAGE, to_take]
 
-func simulated_take_magical_damage(amount: int):
-	if amount <= 0: return
-	var to_take = amount
-	to_take = take_damage_to_shield(to_take)
-	if to_take <= 0: return
-	var result = SimulationResult.new()
-	result.mag_damage_taken = to_take
-	result.resulting_hp = hp - to_take
-	return result
+#func simulated_take_magical_damage(amount: int):
+	#if amount <= 0: return
+	#var to_take = amount
+	#to_take = take_damage_to_shield(to_take)
+	#if to_take <= 0: return
+	#var result = SimulationResult.new()
+	#result.mag_damage_taken = to_take
+	#result.resulting_hp = hp - to_take
+	#return result
 
 func take_status_damage(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount #redundant for now
-	if to_take <= 0: return #redundant for now
+	if to_take <= 0: return [] #redundant for now
 	hp -= to_take
+	return [self, GlobalUtils.AfterEffectTriggers.STAT_DAMAGE, to_take]
 
 func heal(amount: int): #need to do KO checking
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	hp += to_take
+	return [self, GlobalUtils.AfterEffectTriggers.HEAL, to_take]
 
 func rally(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
 	if risk_and_guard > 0: #guard
 		var to_boost = to_take
@@ -161,32 +165,37 @@ func rally(amount: int):
 		while risk_and_guard < 0 or to_take > 0:
 			to_take -= 1
 			risk_and_guard += 1
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	hp += to_take
+	return [self, GlobalUtils.AfterEffectTriggers.RALLY, to_take]
 
 func take_risk(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	risk_and_guard -= to_take
+	return [self, GlobalUtils.AfterEffectTriggers.RISK, to_take]
 
 func gain_guard(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	risk_and_guard += to_take
+	return [self, GlobalUtils.AfterEffectTriggers.GUARD, to_take]
 
 func take_poison(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	poison += to_take
+	return [self, GlobalUtils.AfterEffectTriggers.POISON, to_take]
 
 func take_burn(amount: int):
-	if amount <= 0: return
+	if amount <= 0: return []
 	var to_take = amount
-	if to_take <= 0: return
+	if to_take <= 0: return []
 	burn += to_take
+	return [self, GlobalUtils.AfterEffectTriggers.BURN, to_take]
 #endregion
 
 #region functions to proc statuses like poison

@@ -174,3 +174,23 @@ func check_if_can_use_on_target(_user: Actor, _target: Actor) -> bool:
 
 func resolve():
 	pass
+
+func convert_results_from_array_to_dict(results_arr: Array, results_dict: Dictionary):
+	if results_arr == []: return
+	if results_arr[0] in results_dict:
+		results_dict[results_arr[0]][1].append(results_arr[1])
+		results_dict[results_arr[0]][2].append(results_arr[2])
+	else:
+		results_dict[results_arr[0]] = [[results_arr[1]],[results_arr[2]]]
+
+func calculate_amounts():
+	calculated_phys_damage_amount = phys_damage_amount
+	calculated_mag_damage_amount = mag_damage_amount
+	calculated_stat_damage_amount = stat_damage_amount
+	calculated_heal_amount = heal_amount
+	calculated_rally_amount = rally_amount
+	calculated_risk_amount = risk_amount
+	calculated_guard_amount = guard_amount
+	calculated_shield_amount = shield_amount
+	calculated_poison_amount = poison_amount
+	calculated_burn_amount = burn_amount

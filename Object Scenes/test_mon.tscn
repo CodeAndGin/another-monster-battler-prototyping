@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://mupqcdfime6k"]
+[gd_scene load_steps=17 format=3 uid="uid://mupqcdfime6k"]
 
 [ext_resource type="Texture2D" uid="uid://c0rsfn6ubjlwp" path="res://icon.svg" id="1_dioyj"]
 [ext_resource type="Script" path="res://Scripts/monster.gd" id="1_whqcd"]
@@ -8,6 +8,7 @@
 [ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="5_wpoy4"]
 [ext_resource type="Resource" uid="uid://cwxcepeg42umk" path="res://Scripts/Resources/Moves/Mousquire/strike.tres" id="5_xiai4"]
 [ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="6_0vc1o"]
+[ext_resource type="Resource" uid="uid://d35yjd8ykh1jf" path="res://Scripts/Resources/Moves/testing/rally_after_test.tres" id="7_r33hy"]
 
 [sub_resource type="Resource" id="Resource_y18sm"]
 script = ExtResource("4_xtbv3")
@@ -19,6 +20,17 @@ script = ExtResource("6_0vc1o")
 condition = SubResource("Resource_y18sm")
 priority = 0
 move = ExtResource("5_wpoy4")
+
+[sub_resource type="Resource" id="Resource_owc06"]
+script = ExtResource("4_xtbv3")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_1ew6j"]
+script = ExtResource("6_0vc1o")
+condition = SubResource("Resource_owc06")
+priority = 0
+move = ExtResource("7_r33hy")
 
 [sub_resource type="Resource" id="Resource_jtbml"]
 script = ExtResource("4_xtbv3")
@@ -38,7 +50,7 @@ setA = {
 "Fifth": null,
 "Fifth reaction": null,
 "First": SubResource("Resource_63nq8"),
-"First reaction": null,
+"First reaction": SubResource("Resource_1ew6j"),
 "Fourth": null,
 "Fourth reaction": null,
 "Second": SubResource("Resource_6s241"),

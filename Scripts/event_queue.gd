@@ -33,21 +33,22 @@ func collate_reaction_tactics(arena: Arena) -> void:
 		var keys = ["First reaction", "Second reaction", "Third reaction", "Fourth reaction", "Fifth reaction"] #TODO: CHANGE THIS
 		for key in keys:
 			if not t[key]: continue
-			tactics_to_check.append(t[key])
-			tactic_users[t[key]] = actor
+			var tac = t[key].duplicate()
+			tactics_to_check.append(tac)
+			tactic_users[tac] = actor
 
 func resolve_step() -> bool:
 	if tracker[current] < len(tactics_to_check):
 		#TODO: check the tactic for befores
-		var r = check_for_reaction_at_index(tracker[current], BEFORE, current)
+		var r = check_for_reaction_at_index(tracker[current], BEFORE, current, {})
 		tracker[current] += 1
 		if r: await add_before(r)
 		return true
-	current.resolve() #TODO: Check the tactic for afters
-	for i in len(tactics_to_check):
-		var r = check_for_reaction_at_index(i, AFTER, current)
-		if r: await add_after(r)
+	var result = current.resolve() #TODO: Check the tactic for afters
 	arena.display_event_description(current.user.display_name + " used " + current.move_name + (" (Instant)" if current.is_instant if current is Action else false else ""))
+	for i in len(tactics_to_check):
+		var r = check_for_reaction_at_index(i, AFTER, current, result)
+		if r: await add_after(r)
 	current = afters.pop_front() if len(afters) > 0 else null
 	if current: await arena.get_tree().create_timer(arena.tick_time_length).timeout
 	return true if current else false
@@ -67,7 +68,7 @@ func add_after(move: Move) -> void:
 	await arena.get_tree().create_timer(arena.tick_time_length).timeout
 
 
-func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.ReactionTimings, move_to_check_against: Move):
+func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.ReactionTimings, move_to_check_against: Move, result: Dictionary):
 	var tactic: Tactic = tactics_to_check[index] if tactics_to_check[index] is Tactic else null
 	if not tactic: return null
 	var user: Monster = tactic_users[tactic] if tactic_users[tactic] is Actor else null
@@ -76,7 +77,7 @@ func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.Reacti
 	reaction = reaction as Reaction
 	if not reaction: return null
 	if reaction.before_or_after != before_or_after: return null
-	if not reaction.reaction_timing_condition.check(user, move_to_check_against): return null
+	if not reaction.reaction_timing_condition.check(user, move_to_check_against, result): return null
 	
 	var actor_targets = user.get_actor_targets(reaction.targets)
 	var check = tactic.condition.check(arena, user, actor_targets, reaction, move_to_check_against)
@@ -90,10 +91,12 @@ func check_for_reaction_at_index(index: int, before_or_after: GlobalUtils.Reacti
 		var r = reaction.duplicate()
 		r.user = user
 		r.target = actor_target
+		r.calculate_amounts()
 		return r
 	var r = reaction.duplicate()
 	r.user = user
 	r.move_target = move_to_check_against
+	r.calculate_amounts()
 	return r
 
 
