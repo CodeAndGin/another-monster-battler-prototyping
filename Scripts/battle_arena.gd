@@ -149,6 +149,7 @@ func _on_button_random_pressed() -> void:
 		regenerate_conflict_resolution(going_actor)
 		going_actor.action_value += new_av
 		display_event_description(going_actor.display_name + " used a " + str(new_av) + " AV move.")
+		get_tree().create_timer(tick_time_length).timeout
 		turn_cleanup()
 		#var going = active_refs[calculate_turn_order()[0]]
 		#going.action_value += randi() % 7
@@ -185,6 +186,12 @@ func _on_strike_test_pressed() -> void:
 		resolve_action_stack()
 		turn_cleanup()
 
+func on_player_direct_order(user: Monster, move: Move, target: Monster) -> void:
+	display_event_description(going_actor.display_name + " ordered " + user.display_name + " to use " + move.move_name + " on " + target.display_name)
+	going_actor.av += 3
+	regenerate_conflict_resolution(going_actor)
+	await get_tree().create_timer(tick_time_length).timeout
+	turn_cleanup()
 #endregion
 
 #region Utils
@@ -280,7 +287,7 @@ func execute_to_go():
 
 func execute_new_turn(actor: Actor):
 	going_actor = actor
-	test_button_ready = true
+	if going_actor is Player: test_button_ready = true
 	display_event_description(going_actor.display_name + "'s turn")
 	await get_tree().create_timer(tick_time_length).timeout
 	turn_begin.emit(going_actor)
@@ -448,7 +455,7 @@ func swap_monster(monster_to_swap_in: Actor): #for player swapping; either a ref
 	#regenerate to_go in case of a 0AV swap
 	#TODO: ensure this does not screw with instants
 	generate_to_go()
-	
+	await get_tree().create_timer(tick_time_length).timeout
 	#end of turn cleanup
 	turn_cleanup()
 

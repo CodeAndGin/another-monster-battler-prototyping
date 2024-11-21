@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="MonsterStats" load_steps=7 format=3 uid="uid://b8dc0sw28wuub"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Moves/move.gd" id="1_1t87h"]
+[ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="2_5enf3"]
+[ext_resource type="Resource" uid="uid://dm5fd07dp7j6w" path="res://Scripts/Resources/Moves/Backtabby/reflexes.tres" id="3_4xnhh"]
+[ext_resource type="Resource" uid="uid://cwxcepeg42umk" path="res://Scripts/Resources/Moves/Mousquire/strike.tres" id="4_k6xib"]
+[ext_resource type="Resource" uid="uid://d35yjd8ykh1jf" path="res://Scripts/Resources/Moves/testing/rally_after_test.tres" id="5_rgom3"]
+[ext_resource type="Script" path="res://Scripts/Resources/StatSheets/Monster_Stat_Sheet.gd" id="6_nn7jp"]
+
+[resource]
+script = ExtResource("6_nn7jp")
+monster_name = "Test"
+MAX_HP = 10
+STARTING_HP = 10
+MAX_RV = 10
+STARTING_RV = 10
+overcapping_rv = false
+move_list = Array[ExtResource("1_1t87h")]([ExtResource("2_5enf3"), ExtResource("3_4xnhh"), ExtResource("4_k6xib"), ExtResource("5_rgom3")])

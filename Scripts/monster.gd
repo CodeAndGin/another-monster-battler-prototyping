@@ -5,6 +5,9 @@ class_name Monster
 @export var tactics_sheet: TacticsSet
 var active_tactics_set_is_A = true
 
+var direct_order: Action
+var direct_order_target: Monster
+
 var own_key = ""
 var opponent_key:
 	get:
@@ -32,8 +35,6 @@ var exposed: bool = false
 var poison: int
 var burn: int
 
-var direct_order_move: Move
-
 
 signal tactic_excecuted(was_instant: bool)
 
@@ -41,10 +42,32 @@ signal tactic_excecuted(was_instant: bool)
 func test_tactics_set(user):
 	if not user == self: return
 	if not tactics_sheet: return
+	
+	var was_instant = false
 	await get_tree().create_timer(arena.tick_time_length).timeout
+	if direct_order:
+		print(display_name + " direct order")
+		var target_team = arena.team_zero if direct_order_target.team == 0 else arena.team_one
+		if not direct_order_target in target_team["actives"]:
+			
+			#Get new active target if available (random for now)
+			var potential_targets = get_actor_targets(direct_order.targets)
+			var target = potential_targets.pick_random() if potential_targets != [] else null
+			direct_order_target = target
+		if direct_order_target and direct_order.check_if_can_use_cost(self) and direct_order.check_if_can_use_on_target(self, direct_order_target):
+			
+			direct_order.add_to_action_stack(arena, self, direct_order_target)
+			arena.display_event_description(display_name + " started to use " + direct_order.move_name + (" (Instant)" if direct_order.is_instant else ""))
+			was_instant = direct_order.is_instant
+			tactic_excecuted.emit(was_instant)
+			direct_order = null
+			return
+		print("Direct order failed, defaulting to tactics")
+	
+	
 	var keys = ["First", "Second", "Third", "Fourth", "Fifth"]
 	var active_set = tactics_sheet.setA if active_tactics_set_is_A else tactics_sheet.setB
-	var was_instant = false
+	
 	var went = false
 	for key in keys:
 		if not active_set[key]: continue

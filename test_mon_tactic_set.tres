@@ -1,0 +1,69 @@
+[gd_resource type="Resource" script_class="TacticsSet" load_steps=13 format=3 uid="uid://fq1d36r44t08"]
+
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set.gd" id="1_6sqod"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/self_HP_value_compare.gd" id="2_u1yrj"]
+[ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="3_1rjnq"]
+[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="4_27wvs"]
+[ext_resource type="Resource" uid="uid://cwxcepeg42umk" path="res://Scripts/Resources/Moves/Mousquire/strike.tres" id="5_42o8r"]
+[ext_resource type="Resource" uid="uid://dm5fd07dp7j6w" path="res://Scripts/Resources/Moves/Backtabby/reflexes.tres" id="6_bm5pm"]
+
+[sub_resource type="Resource" id="Resource_4fwfn"]
+script = ExtResource("2_u1yrj")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_e5ko8"]
+script = ExtResource("4_27wvs")
+condition = SubResource("Resource_4fwfn")
+priority = 0
+move = ExtResource("3_1rjnq")
+
+[sub_resource type="Resource" id="Resource_te7vh"]
+script = ExtResource("2_u1yrj")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_lglcr"]
+script = ExtResource("4_27wvs")
+condition = SubResource("Resource_te7vh")
+priority = 0
+move = ExtResource("6_bm5pm")
+
+[sub_resource type="Resource" id="Resource_6gc3l"]
+script = ExtResource("2_u1yrj")
+amount_to_compare_against = 0
+comparison = 8
+
+[sub_resource type="Resource" id="Resource_h8yyh"]
+script = ExtResource("4_27wvs")
+condition = SubResource("Resource_6gc3l")
+priority = 0
+move = ExtResource("5_42o8r")
+
+[resource]
+script = ExtResource("1_6sqod")
+default_set_is_A = true
+setA = {
+"Fifth": null,
+"Fifth reaction": null,
+"First": SubResource("Resource_e5ko8"),
+"First reaction": SubResource("Resource_lglcr"),
+"Fourth": null,
+"Fourth reaction": null,
+"Second": SubResource("Resource_h8yyh"),
+"Second reaction": null,
+"Third": null,
+"Third reaction": null
+}
+setB = {
+"Fifth": null,
+"Fifth reaction": null,
+"First": null,
+"First reaction": null,
+"Fourth": null,
+"Fourth reaction": null,
+"Second": null,
+"Second reaction": null,
+"Third": null,
+"Third reaction": null
+}

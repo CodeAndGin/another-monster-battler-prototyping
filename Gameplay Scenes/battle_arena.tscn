@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://dafxi6djap6hu"]
+[gd_scene load_steps=16 format=3 uid="uid://dafxi6djap6hu"]
 
 [ext_resource type="Script" path="res://Scripts/battle_arena.gd" id="1_rw6c8"]
 [ext_resource type="PackedScene" uid="uid://b7mxqokcravnv" path="res://Gameplay Scenes/arena.tscn" id="1_ygb6g"]
@@ -9,13 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://mupqcdfime6k" path="res://Object Scenes/test_mon.tscn" id="4_s2ued"]
 [ext_resource type="Script" path="res://Scripts/battle_hud.gd" id="5_851yb"]
 [ext_resource type="PackedScene" uid="uid://c5114u4538jg4" path="res://UI Scenes/player_buttons.tscn" id="6_uxm72"]
-[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactics_set.gd" id="7_507k4"]
 [ext_resource type="PackedScene" uid="uid://dphxdtiqku0tt" path="res://UI Scenes/direct_order_menu.tscn" id="7_mejuj"]
-[ext_resource type="Script" path="res://Scripts/Resources/Tactics/self_HP_value_compare.gd" id="8_3i3pi"]
 [ext_resource type="PackedScene" uid="uid://dij256j18u2pw" path="res://UI Scenes/switch_mon_menu.tscn" id="8_756s2"]
-[ext_resource type="Script" path="res://Scripts/Resources/Tactics/tactic.gd" id="9_dcj35"]
-[ext_resource type="Resource" uid="uid://hhiu80e5joq8" path="res://Scripts/Resources/Moves/Backtabby/graze.tres" id="9_do8yt"]
-[ext_resource type="Resource" uid="uid://dm5fd07dp7j6w" path="res://Scripts/Resources/Moves/Backtabby/reflexes.tres" id="11_tqoo6"]
 [ext_resource type="PackedScene" uid="uid://4ogvq3skswfl" path="res://UI Scenes/mon_health_bar.tscn" id="12_dmapu"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_xcgp1"]
@@ -31,70 +26,9 @@ sky = SubResource("Sky_e8bxa")
 tonemap_mode = 2
 glow_enabled = true
 
-[sub_resource type="Resource" id="Resource_y18sm"]
-script = ExtResource("8_3i3pi")
-amount_to_compare_against = 0
-comparison = 8
-
-[sub_resource type="Resource" id="Resource_63nq8"]
-script = ExtResource("9_dcj35")
-condition = SubResource("Resource_y18sm")
-priority = 0
-move = ExtResource("9_do8yt")
-
-[sub_resource type="Resource" id="Resource_vphxi"]
-script = ExtResource("8_3i3pi")
-amount_to_compare_against = 0
-comparison = 8
-
-[sub_resource type="Resource" id="Resource_ohqtb"]
-script = ExtResource("9_dcj35")
-condition = SubResource("Resource_vphxi")
-priority = 0
-move = ExtResource("11_tqoo6")
-
-[sub_resource type="Resource" id="Resource_jtbml"]
-script = ExtResource("8_3i3pi")
-amount_to_compare_against = 0
-comparison = 8
-
-[sub_resource type="Resource" id="Resource_6s241"]
-script = ExtResource("9_dcj35")
-condition = SubResource("Resource_jtbml")
-priority = 0
-move = ExtResource("3_3whsq")
-
-[sub_resource type="Resource" id="Resource_y7iva"]
-script = ExtResource("7_507k4")
-default_set_is_A = true
-setA = {
-"Fifth": null,
-"Fifth reaction": null,
-"First": SubResource("Resource_63nq8"),
-"First reaction": SubResource("Resource_ohqtb"),
-"Fourth": null,
-"Fourth reaction": null,
-"Second": SubResource("Resource_6s241"),
-"Second reaction": null,
-"Third": null,
-"Third reaction": null
-}
-setB = {
-"Fifth": null,
-"Fifth reaction": null,
-"First": null,
-"First reaction": null,
-"Fourth": null,
-"Fourth reaction": null,
-"Second": null,
-"Second reaction": null,
-"Third": null,
-"Third reaction": null
-}
-
 [node name="BattleArena" type="Node3D"]
 script = ExtResource("1_rw6c8")
-tick_time_length = 2.0
+tick_time_length = 1.0
 generic_spell = ExtResource("2_8bg6a")
 test_move = ExtResource("3_3whsq")
 
@@ -130,8 +64,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 0.0599527, 0)
 
 [node name="TestMon" parent="arena/MonsterPoint1" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0, 0, 0)
-tactics_sheet = SubResource("Resource_y7iva")
-display_name = "Mon A One"
+display_name = "Mon P1 1"
 
 [node name="MovePoint1" type="Node3D" parent="arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.29808, 0.401092, 0)
@@ -142,26 +75,23 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 2.3330
 [node name="MonsterPoint2" type="Node3D" parent="arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.5, 0.06, 0)
 
-[node name="TestMon" parent="arena/MonsterPoint2" node_paths=PackedStringArray("arena") instance=ExtResource("4_s2ued")]
+[node name="TestMon" parent="arena/MonsterPoint2" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
-arena = NodePath("../../..")
-display_name = "Mon A Two"
+display_name = "Mon P2 1"
 
 [node name="Bench1" type="Node3D" parent="arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4.99404, 0, -1.53998)
 
-[node name="TestMon2" parent="arena/Bench1" node_paths=PackedStringArray("arena") instance=ExtResource("4_s2ued")]
+[node name="TestMon2" parent="arena/Bench1" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.11095, 0.0599527, -0.0660602)
-arena = NodePath("../../..")
-display_name = "Mon B One"
+display_name = "Mon P1 2"
 
 [node name="FrontFace" parent="arena/Bench1/TestMon2" index="0"]
 modulate = Color(0.982298, 0.288973, 0, 1)
 
-[node name="TestMon3" parent="arena/Bench1" node_paths=PackedStringArray("arena") instance=ExtResource("4_s2ued")]
+[node name="TestMon3" parent="arena/Bench1" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, 1, 0, 1, 0, -1, 0, -4.37114e-08, 0.116154, 0.0599527, 1.22663)
-arena = NodePath("../../..")
-display_name = "Mon C One"
+display_name = "Mon P1 3"
 
 [node name="FrontFace" parent="arena/Bench1/TestMon3" index="0"]
 modulate = Color(6.16074e-06, 0.624823, 0.808881, 1)
@@ -169,18 +99,16 @@ modulate = Color(6.16074e-06, 0.624823, 0.808881, 1)
 [node name="Bench2" type="Node3D" parent="arena"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.31231, 0, 1.79968)
 
-[node name="TestMon2" parent="arena/Bench2" node_paths=PackedStringArray("arena") instance=ExtResource("4_s2ued")]
+[node name="TestMon2" parent="arena/Bench2" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.361393, 0.06, -1.69033)
-arena = NodePath("../../..")
-display_name = "Mon B Two"
+display_name = "Mon P2 2"
 
 [node name="FrontFace" parent="arena/Bench2/TestMon2" index="0"]
 modulate = Color(0.961032, 0.322954, 0, 1)
 
-[node name="TestMon3" parent="arena/Bench2" node_paths=PackedStringArray("arena") instance=ExtResource("4_s2ued")]
+[node name="TestMon3" parent="arena/Bench2" instance=ExtResource("4_s2ued")]
 transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, -0.395927, 0.06, -0.39551)
-arena = NodePath("../../..")
-display_name = "Mon C Two"
+display_name = "Mon P2 3"
 
 [node name="FrontFace" parent="arena/Bench2/TestMon3" index="0"]
 modulate = Color(6.54578e-06, 0.61345, 0.862902, 1)
@@ -290,53 +218,8 @@ offset_top = -76.0
 offset_right = -206.0
 grow_vertical = 0
 
-[node name="EventDisplayLog" type="VBoxContainer" parent="CanvasLayer/HUD"]
-layout_mode = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_right = -210.0
-offset_bottom = 569.0
-grow_horizontal = 2
-
-[node name="LogToggle" type="Button" parent="CanvasLayer/HUD/EventDisplayLog"]
-layout_mode = 2
-toggle_mode = true
-text = "Toggle Display Log"
-
-[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD/EventDisplayLog"]
-visible = false
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer"]
-layout_mode = 2
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
-
-[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer"]
-layout_mode = 2
-
-[node name="EventDisplayLogLabels" type="VBoxContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="Label" type="Label" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer/EventDisplayLogLabels"]
-layout_mode = 2
-text = "test"
-horizontal_alignment = 1
-
-[node name="Direct Order Menu" parent="CanvasLayer/HUD" instance=ExtResource("7_mejuj")]
-layout_mode = 1
-anchors_preset = -1
-anchor_top = 1.0
-anchor_right = 0.5
-offset_top = -431.0
-offset_right = -171.0
-offset_bottom = -74.0
-grow_horizontal = 1
-grow_vertical = 0
+[node name="Direct Order Button" parent="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer" index="0"]
+toggle_mode = false
 
 [node name="Switch Mon Menu" parent="CanvasLayer/HUD" instance=ExtResource("8_756s2")]
 layout_mode = 1
@@ -463,16 +346,70 @@ offset_top = -0.0620041
 offset_right = 2.0
 offset_bottom = 0.0709991
 
+[node name="EventDisplayLog" type="VBoxContainer" parent="CanvasLayer/HUD"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 1.0
+offset_right = -209.0
+offset_bottom = 569.0
+grow_horizontal = 2
+
+[node name="LogToggle" type="Button" parent="CanvasLayer/HUD/EventDisplayLog"]
+layout_mode = 2
+toggle_mode = true
+text = "Toggle Display Log"
+
+[node name="PanelContainer" type="PanelContainer" parent="CanvasLayer/HUD/EventDisplayLog"]
+visible = false
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer"]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="ScrollContainer" type="ScrollContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="EventDisplayLogLabels" type="VBoxContainer" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Label" type="Label" parent="CanvasLayer/HUD/EventDisplayLog/PanelContainer/MarginContainer/ScrollContainer/EventDisplayLogLabels"]
+layout_mode = 2
+text = "test"
+horizontal_alignment = 1
+
+[node name="Direct Order Menu" parent="CanvasLayer/HUD" node_paths=PackedStringArray("arena") instance=ExtResource("7_mejuj")]
+visible = false
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.871
+anchor_bottom = 0.918
+offset_left = 373.0
+offset_top = 353.0
+offset_right = -391.6
+offset_bottom = -116.2
+grow_horizontal = 1
+grow_vertical = 0
+arena = NodePath("../../..")
+
 [connection signal="turn_begin" from="." to="CanvasLayer/HUD" method="_on_battle_arena_turn_begin"]
 [connection signal="turn_order_calculated" from="." to="CanvasLayer/HUD/TurnOrderDisplay" method="_on_battle_arena_turn_order_calculated"]
 [connection signal="pressed" from="CanvasLayer/HUD/HBoxContainer/Button" to="." method="_on_av_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/ButtonRandom" to="." method="_on_button_random_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/strikeTest" to="." method="_on_strike_test_pressed"]
 [connection signal="pressed" from="CanvasLayer/HUD/CastSpellTester/Cast" to="." method="_on_cast_pressed"]
+[connection signal="pressed" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Direct Order Button" to="CanvasLayer/HUD" method="_on_direct_order_button_pressed"]
 [connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Direct Order Button" to="CanvasLayer/HUD" method="_on_direct_order_button_toggled"]
 [connection signal="toggled" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/VBoxContainer/HBoxContainer/Switch Monster Button" to="CanvasLayer/HUD" method="_on_switch_monster_button_toggled"]
 [connection signal="pressed" from="CanvasLayer/HUD/Player Buttons/MarginContainer/HBoxContainer/Confirm" to="CanvasLayer/HUD" method="_on_confirm_pressed"]
 [connection signal="toggled" from="CanvasLayer/HUD/EventDisplayLog/LogToggle" to="CanvasLayer/HUD" method="_on_log_toggle_toggled"]
+[connection signal="direct_order_complete" from="CanvasLayer/HUD/Direct Order Menu" to="." method="on_player_direct_order"]
 
 [editable path="arena/Bench1/TestMon2"]
 [editable path="arena/Bench1/TestMon3"]

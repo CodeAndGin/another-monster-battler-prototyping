@@ -15,11 +15,36 @@ func _ready() -> void:
 	switch_mon_menu.populate_buttons($"../../arena/Bench1") #populate causes weird scaling on first use no idea why; this mitigates the issue
 	#reset_all_buttons()
 
-func _on_direct_order_button_toggled(toggled_on: bool) -> void:
-	if toggled_on: detoggle("Direct Order Menu")
-	#test version that does work, but need to register which player is pressing somehow; we'll get there
-	if arena_root.monster_point_player_1: direct_order_menu.populate_buttons(arena_root.monster_point_player_1.get_children()[0].move_list)
-	direct_order_menu.visible = toggled_on
+#func _on_direct_order_button_toggled(toggled_on: bool) -> void:
+	##if toggled_on: detoggle("Direct Order Menu")
+	##test version that does work, but need to register which player is pressing somehow; we'll get there
+	##if arena_root.monster_point_player_1: direct_order_menu.populate_buttons(arena_root.monster_point_player_1.get_children()[0].move_list)
+	#if toggled_on:
+		#direct_order_menu.visible = true
+		#direct_order_menu.state = direct_order_menu.States.CHOOSE_MONSTER_TO_ORDER
+		#direct_order_menu.populate_buttons()
+	#else:
+		#direct_order_menu.visible = true
+		#direct_order_menu.state = direct_order_menu.States.INACTIVE
+		#direct_order_menu.populate_buttons()
+
+func _on_direct_order_button_pressed() -> void:
+	if not arena_root.test_button_ready: return
+	direct_order_menu.player = arena_root.going_actor if arena_root.going_actor is Player else null
+	if not direct_order_menu.player:
+		printerr("Direct Order menu should not be used outside of player turns")
+		return
+	direct_order_menu.visible = !direct_order_menu.visible
+	if direct_order_menu.state == direct_order_menu.States.INACTIVE:
+		direct_order_menu.state = direct_order_menu.States.CHOOSE_MONSTER_TO_ORDER
+		direct_order_menu.populate_buttons()
+	else:
+		direct_order_menu.state = direct_order_menu.States.INACTIVE
+		direct_order_menu.populate_buttons()
+		direct_order_menu.monster_to_order = null
+		direct_order_menu.move_to_order = null
+		direct_order_menu.target_for_move = null
+
 
 func _on_switch_monster_button_toggled(toggled_on: bool) -> void:
 	if arena_root.teams[0]["players"].has(arena_root.going_actor):#arena_root.going_actor_key == "player1":
